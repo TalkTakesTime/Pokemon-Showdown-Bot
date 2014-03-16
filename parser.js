@@ -219,6 +219,19 @@ exports.parse = {
 		var hasRank = (rank.split('').indexOf(user.charAt(0)) !== -1) || (config.excepts.indexOf(toId(user.substr(1))) !== -1);
 		return hasRank;
 	},
+	checkCaps: function(user, room, connection, msg) {
+		user = toId(user);
+		if (room.charAt(0) === ',' || user === 'bottt') return;
+		room = toId(room);
+		var alpha = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+			for (var i=0;i<alpha.length;i++) {
+				if(msg.toUpperCase().indexOf(alpha[i]) >= 0 && config.allowmute) {
+					if (msg === msg.toUpperCase() && msg.length >= 4) {
+						this.say(connection, room, '/mute ' + user +',caps');
+					}
+			}
+			}	
+	},
 	recordChatData: function(user, room, connection, msg) {
 		// NOTE: this is still in early stages
 		user = toId(user);
