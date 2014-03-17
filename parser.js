@@ -239,6 +239,15 @@ exports.parse = {
 
 		if (config.allowmute) {
 			var muteMessage = '';
+			// caps
+			var alpha = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+			for (var i=0;i<alpha.length;i++) {
+				if(msg.toUpperCase().indexOf(alpha[i]) >= 0) {
+					if (msg === msg.toUpperCase() && msg.length >= 4) {
+						muteMessage = ', caps'
+					}
+				}
+			}
 			if (this.chatData[room][user].times.length >= 5 && Date.now() - this.chatData[room][user].times[this.chatData[room][user].times.length - 5] < 5*1000) {
 				muteMessage = ', Automated mute: flooding.';
 			}
