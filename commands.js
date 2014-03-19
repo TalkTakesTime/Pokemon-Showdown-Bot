@@ -69,6 +69,14 @@ exports.commands = {
 		});
 		req.end();
 	},
+	thanks: function(arg, by, room, con) {
+		if (!this.hasRank)by, '+%@#~'))
+		var self = this;
+		
+			self.say(con, room, 'You\'re welcome!')
+		});
+		req.end();
+	},
 	choose: function(arg, by, room, con) {
 		if (arg.indexOf(',') === -1) {
 			var choices = arg.split(' ');
