@@ -58,25 +58,40 @@ exports.commands = {
 		this.say(con, room, arg + ' (' + by + ' said this)');
 	},
 	joke: function(arg, by, room, con) {
-		if (!this.hasRank(by, '#~')) return false;
-		var self = this;
-
-		var reqOpt = {
-			hostname: 'api.icndb.com',
-			path: '/jokes/random',
-			method: 'GET'
-		};
-		var req = http.request(reqOpt, function(res) {
-			res.on('data', function(chunk) {
-				try {
-					var data = JSON.parse(chunk);
-					self.say(con, room, data.value.joke);
-				} catch (e) {
-					self.say(con, room, 'Sorry, couldn\'t fetch a random joke... :(');
+		var opts = arg.split(',');
+		switch(toId(opts[0])) {
+			case 'on': case 'enable': case 'off': case 'disable':
+				if (!this.hasRank(by, '#~')) return false;
+				var tarRoom = (opts[1] ? opts[1].trim() : room);
+				if (tarRoom.charAt(0) === ',') {
+					this.say(con, room, 'You cannot disable or enable jokes for PMs.');
+					return;
 				}
+				config.buzz[toId(tarRoom)] = (toId(opts[0]) === 'on' || toId(opts[0]) === 'enable') ? true : false;
+				this.say(con, room, 'Jokes are now ' + (config.buzz[toId(tarRoom)] ? 'enabled' : 'disabled') + ' in ' + tarRoom + '.');
+				break;
+			default:
+			if (this.buzzed || !config.buzz[room] || room.charAt(0) === ',') return false;
+		if (!this.hasRank(by, '%@#~')) return false;
+			var self = this;
+
+			var reqOpt = {
+				hostname: 'api.icndb.com',
+				path: '/jokes/random',
+				method: 'GET'
+			};
+			var req = http.request(reqOpt, function(res) {
+				res.on('data', function(chunk) {
+					try {
+						var data = JSON.parse(chunk);
+						self.say(con, room, data.value.joke);
+					} catch (e) {
+						self.say(con, room, 'Sorry, couldn\'t fetch a random joke... :(');
+					}
+				});
 			});
-		});
-		req.end();
+			req.end();
+		}
 	},
 	choose: function(arg, by, room, con) {
 		if (arg.indexOf(',') === -1) {
