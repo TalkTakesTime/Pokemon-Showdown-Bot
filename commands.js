@@ -79,6 +79,15 @@ exports.commands = {
 		});
 		req.end();
 	},
+	thanks: function(arg, by, room, con) {
+		if (this.hasRank(by, '+%@#~') || room.charAt(0) === ',') {
+			var text = '';
+		} else {
+			var text = '/pm ' + by + ', ';
+		}
+		text += 'No problem, "+ by +"!';
+		this.say(con, room, text);
+	},
 	choose: function(arg, by, room, con) {
 		if (arg.indexOf(',') === -1) {
 			var choices = arg.split(' ');
