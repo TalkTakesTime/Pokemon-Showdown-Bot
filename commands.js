@@ -85,10 +85,25 @@ exports.commands = {
 		} else {
 			var choices = arg.split(',');
 		}
+		var retort = 'Please do not abuse the bot. I do not know how not to be a hypocrite.';
+		var botAbuse = new Boolean(0);
+		var capsMatch = arg.replace(/[^A-Za-z]/g, '').match(/[A-Z]/g);
+		var stretchMatch = msg.toLowerCase().match(/(.)\1{7,}/g);
+		if (arg.match(/snen/g) && arg.match(/snen/g).length > 6) {
+			this.say(retort);
+			botAbuse++;
+		else if (capsMatch && toId(arg).length > 18 && (capsMatch.length >= Math.floor(toId(arg).length * 0.8) {
+			this.say(retort);
+			botAbuse++;
+		}
+		else if (steretchMatch) {
+			this.say(retort);
+			botAbuse++
+		}
 		choices = choices.filter(function(i) {return (toId(i) !== '')});
 		if (choices.length < 2) return this.say(con, room, (room.charAt(0) === ',' ? '': '/pm ' + by + ', ') + '.choose: You must give at least 2 valid choices.');
 		var choice = choices[Math.floor(Math.random()*choices.length)];
-		this.say(con, room, ((this.hasRank(by, '+%@#~') || room.charAt(0) === ',') ? '':'/pm ' + by + ', ') + stripCommands(choice));
+		if (!botAbuse) this.say(con, room, ((this.hasRank(by, '+%@#~') || room.charAt(0) === ',') ? '':'/pm ' + by + ', ') + stripCommands(choice));
 	},
 	usage: 'usagestats',
 	usagestats: function(arg, by, room, con) {
