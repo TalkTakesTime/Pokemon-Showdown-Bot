@@ -87,22 +87,13 @@ exports.commands = {
 		}
 		choices = choices.filter(function(i) {return (toId(i) !== '')});
 		if (choices.length < 2) return this.say(con, room, (room.charAt(0) === ',' ? '': '/pm ' + by + ', ') + '.choose: You must give at least 2 valid choices.');
-		var choice = choices[Math.floor(Math.random()*choices.length)];
-		choice = choice.replace(/ +/g, " ");
-		var botAbuse = new Boolean(0);
+		var choice = choices[Math.floor(Math.random()*choices.length)].replace(/ +/g, " ");
+		var botAbuse = false;
 		var capsMatch = choice.replace(/[^A-Za-z]/g, '').match(/[A-Z]/g);
 		var stretchMatch = choice.toLowerCase().match(/(.)\1{7,}/g);
-		if (capsMatch && toId(arg).length > 18 && (capsMatch.length >= Math.floor(toId(arg).length * 0.8) {
-			botAbuse++;
-		}
-		else if (stretchMatch) {
-			botAbuse++;
-		}
-		else if (choice.match(/snen/g) && choice.match(/snen/g).length > 6) {
-			botAbuse++;
-		}
+		if ((capsMatch && toId(choice).length > 18 && (capsMatch.length >= Math.floor(toId(choice).length * 0.8))) || (stretchMatch) || (choice.match(/snen/g) && choice.match(/snen/g).length > 6)) botAbuse = true;
 		var retort = 'Please do not abuse the bot. I do not know how not to be a hypocrite.';
-		(botAbuse == false) ? this.say(con, room, ((this.hasRank(by, '+%@#~') || room.charAt(0) === ',') ? '':'/pm ' + by + ', ') + stripCommands(choice)) : this.say(con, room, retort);
+		(!botAbuse) ? this.say(con, room, ((this.hasRank(by, '+%@#~') || room.charAt(0) === ',') ? '':'/pm ' + by + ', ') + stripCommands(choice)) : this.say(con, room, retort);
 	},
 	usage: 'usagestats',
 	usagestats: function(arg, by, room, con) {
