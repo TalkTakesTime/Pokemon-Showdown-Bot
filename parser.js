@@ -259,7 +259,7 @@ exports.parse = {
 					pointVal = (room === 'lobby') ? 5 : 4;
 				}
 			}
-			if (this.chatData[user][room].times.length >= 5 && (Date.now() - this.chatData[user][room].times[this.chatData[user][room].times.length - 5]) < 6*1000) {
+			if (this.chatData[user][room].times.length >= 5 && (Date.now() - this.chatData[user][room].times[this.chatData[user][room].times.length - 8]) < 6*1000) {
 				if (pointVal < 1) {
 					pointVal = 1;
 					muteMessage = ', Automated response: flooding';
