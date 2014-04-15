@@ -260,6 +260,12 @@ exports.parse = {
 				}
 			}
 			if (this.chatData[user][room].times.length >= 5 && (Date.now() - this.chatData[user][room].times[this.chatData[user][room].times.length - 5]) < 6*1000) {
+				if (pointVal < 1) {
+					pointVal = 1;
+					muteMessage = ', Automated response: flooding';
+				}
+			}
+			if (this.chatData[user][room].times.length >= 8 && (Date.now() - this.chatData[user][room].times[this.chatData[user][room].times.length - 5]) < 6*1000) {
 				if (pointVal < 2) {
 					pointVal = 2;
 					muteMessage = ', Automated response: flooding';
