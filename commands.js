@@ -110,9 +110,9 @@ exports.commands = {
 			contact: 1,
 			randommoves: 1,
 			trad: 1,
-			bh: 1,
 			dexsearch: 1,
-			stat: 1
+			stat: 1,
+			informations: 1
 		};
 		var modOpts = {
 			flooding: 1,
@@ -1052,17 +1052,26 @@ exports.commands = {
 		
 		this.say(con, room, text);
 	},
+	
+	hackmons: function(arg, by, room, con) {
+		if (!this.canUse('informations', room, by) || room.charAt(0) === ',') return false
+		var text = "In Hackmons puoi usare ogni Pokémon con qualsiasi abilità e mossa, inoltre puoi dare 252 ev in ogni stat";
+		this.say(con, room, text);
+	},
 	bh: function(arg, by, room, con) {
-		if (!this.canUse('bh', room, by) || room.charAt(0) === ',') return false
-		
+		if (!this.canUse('informations', room, by) || room.charAt(0) === ',') return false
 		var text = "In Balanced Hackmons sono bannate le OHKO moves, Wonder Guard, Shadow Tag, Arena Trap, Huge Power, Pure Power, Parental Bond, e c'è l'Ability Clause (non puoi usare due Pokémon con la stessa abilità)";
 		this.say(con, room, text);
 	},
 	tour: 'tours',
 	tours: function(arg, by, room, con) {
-		if (!this.canUse('bh', room, by) || room.charAt(0) === ',') return false
-		
+		if (!this.canUse('informations', room, by) || room.charAt(0) === ',') return false
 		var text = "Tornei gratis -> play.pokemonshowdown.com/tournaments";
+		this.say(con, room, text);
+	},
+	avatar: function(arg, by, room, con) {
+		if (!this.canUse('informations', room, by) || room.charAt(0) === ',') return false
+		var text = "Per cambiare il tuo avatar, clicca sul tuo nick, poi clicca sul tuo avatar, e scegli quello nuovo";
 		this.say(con, room, text);
 	},
 	
