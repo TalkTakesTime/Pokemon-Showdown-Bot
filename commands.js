@@ -14,7 +14,7 @@ exports.commands = {
 	 * These commands are here to provide information about the bot.
 	 */
 
-	about: function(arg, by, room, con) {
+	/*about: function(arg, by, room, con) {
 		if (this.hasRank(by, '#~') || room.charAt(0) === ',') {
 			var text = '';
 		} else {
@@ -36,6 +36,15 @@ exports.commands = {
 			text += 'There is no guide for this bot. PM the owner with any questions.';
 		}
 		this.say(con, room, text);
+	},*/
+	guida: function(arg, by, room, con) {
+		if (this.hasRank(by, '%@#~') || room.charAt(0) === ',') {
+			var text = '';
+		} else {
+			var text = '/pm ' + by + ', ';
+		}
+		text += 'Lista dei comandi di cerbottana --> http://pastebin.com/tgaNW2Bg';
+		this.say(con, room, text);
 	},
 
 	/**
@@ -56,7 +65,7 @@ exports.commands = {
 			error('failed to reload: ' + sys.inspect(e));
 		}
 	},
-	custom: function(arg, by, room, con) {
+	/*custom: function(arg, by, room, con) {
 		if (!this.hasRank(by, '~')) return false;
 		// Custom commands can be executed in an arbitrary room using the syntax
 		// ".custom [room] command", e.g., to do !data pikachu in the room lobby,
@@ -77,7 +86,7 @@ exports.commands = {
 		} catch (e) {
 			this.say(con, room, e.name + ": " + e.message);
 		}
-	},
+	},*/
 
 	/**
 	 * Room Owner commands
@@ -90,19 +99,20 @@ exports.commands = {
 		if (!this.hasRank(by, '%@&#~') || room.charAt(0) === ',') return false;
 
 		var settable = {
-			say: 1,
-			joke: 1,
-			choose: 1,
-			usagestats: 1,
-			buzz: 1,
-			helix: 1,
-			survivor: 1,
-			games: 1,
-			wifi: 1,
-			monotype: 1,
-			autoban: 1,
-			happy: 1,
-			guia: 1
+			randompoke: 1,
+			randomteam: 1,
+			numberdex: 1,
+			tier: 1,
+			gen: 1,
+			weight: 1,
+			height: 1,
+			priority: 1,
+			contact: 1,
+			randommoves: 1,
+			trad: 1,
+			bh: 1,
+			dexsearch: 1,
+			stat: 1
 		};
 		var modOpts = {
 			flooding: 1,
@@ -199,7 +209,7 @@ exports.commands = {
 			}
 		}
 	},
-	blacklist: 'autoban',
+	/*blacklist: 'autoban',
 	ban: 'autoban',
 	ab: 'autoban',
 	autoban: function(arg, by, room, con) {
@@ -299,7 +309,7 @@ exports.commands = {
 		delete this.settings['bannedwords'][arg.trim().toLowerCase()];
 		this.writeSettings();
 		this.say(con, room, 'Word "' + arg.trim().toLowerCase() + '" unbanned.');
-	},
+	},*/
 
 	/**
 	 * General commands
@@ -307,7 +317,7 @@ exports.commands = {
 	 * Add custom commands here.
 	 */
 
-	tell: 'say',
+	/*tell: 'say',
 	say: function(arg, by, room, con) {
 		if (!this.canUse('say', room, by)) return false;
 		this.say(con, room, stripCommands(arg) + ' (' + by + ' said this)');
@@ -399,14 +409,670 @@ exports.commands = {
 			case 20: text += "Don't count on it."; break;
 		}
 		this.say(con, room, text);
+	},*/
+	randompike: 'randompoke',
+	randompokemon: 'randompoke',
+	randompoke: function(arg, by, room, con) {
+		if (this.canUse('randompoke', room, by) || room.charAt(0) === ',') {
+			var text = '';
+		} else {
+			return this.say(con, room, '/pm ' + by + ', Scrivimi il comando in PM.');
+		}
+		try {
+			var pokedex = require('./pokedex.js').BattlePokedex;
+			var formatsdata = require('./formats-data.js').BattleFormatsData;
+		} catch (e) {
+			return this.say(con, room, 'Si è verificato un errore: riprova fra qualche secondo.');
+		}
+		var pokemon = [];
+		var extractedmon = '';
+		for (var i in formatsdata) {
+			if (formatsdata[i].tier) {
+				if (arg != '') {
+					if (formatsdata[i].tier.toLowerCase() == arg) {
+						pokemon.push(pokedex[i].species);
+					}
+				}
+				else {
+					if (formatsdata[i].tier != 'Unreleased' && formatsdata[i].tier != '' && formatsdata[i].tier != 'CAP') {
+						pokemon.push(pokedex[i].species);
+					}
+				}
+			}
+		}
+		if (pokemon.length == 0) return this.say(con, room, 'Tier non trovata');
+		extractedmon = pokemon[Math.floor(Math.random()*pokemon.length)];
+		text += extractedmon;
+		this.say(con, room, text);
 	},
+	randomteam: function(arg, by, room, con) {
+		if (this.canUse('randomteam', room, by) || room.charAt(0) === ',') {
+			var text = '';
+		} else {
+			return this.say(con, room, '/pm ' + by + ', Scrivimi il comando in PM.');
+		}
+		try {
+			var pokedex = require('./pokedex.js').BattlePokedex;
+			var formatsdata = require('./formats-data.js').BattleFormatsData;
+		} catch (e) {
+			return this.say(con, room, 'Si è verificato un errore: riprova fra qualche secondo.');
+		}
+		var pokemon = [];
+		var extractedmon = '';
+		for (var i in formatsdata) {
+			if (formatsdata[i].tier) {
+				if (arg != '') {
+					if (formatsdata[i].tier.toLowerCase() == arg) {
+						pokemon.push(pokedex[i].species);
+					}
+				}
+				else {
+					if (formatsdata[i].tier != 'Unreleased' && formatsdata[i].tier != '' && formatsdata[i].tier != 'CAP') {
+						pokemon.push(pokedex[i].species);
+					}
+				}
+			}
+		}
+		if (pokemon.length == 0) return this.say(con, room, 'Tier non trovata');
+		var arrayextracted = new Array();
+		for (var i = 1; i <= 6; i++) {
+			extractedmon = pokemon[Math.floor(Math.random()*pokemon.length)];
+			if (arrayextracted.indexOf(extractedmon) === -1) {
+				arrayextracted[i-1] = extractedmon;
+				text += extractedmon;
+				if (i != 6) text += ', ';
+			}
+			else {
+				i--;
+			}
+		}
+		this.say(con, room, text);
+	},
+	dexnumber: 'numberdex',
+	numberdex: function(arg, by, room, con) {
+		if (this.canUse('numberdex', room, by) || room.charAt(0) === ',') {
+			var text = '';
+		}
+		else {
+			return this.say(con, room, '/pm ' + by + ', Scrivimi il comando in PM.');
+		}
+		try {
+			var pokedex = require('./pokedex.js').BattlePokedex;
+			var aliases = require('./aliases.js').BattleAliases;
+		} catch (e) {
+			return this.say(con, room, 'Si è verificato un errore: riprova fra qualche secondo.');
+		}
+		var pokemon = arg.toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		if (aliases[pokemon]) pokemon = aliases[pokemon].toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		for (var i in pokedex) {
+			if (pokedex[i].num) {
+				if (pokedex[i].num == arg) {
+					text += pokedex[i].species;
+					break;
+				}
+			}
+		}
+		if (text == '') text = 'Pokémon non trovato';
+		this.say(con, room, text);
+	},
+	gen: function(arg, by, room, con) {
+		if (this.canUse('gen', room, by) || room.charAt(0) === ',') {
+			var text = '';
+		}
+		else {
+			return this.say(con, room, '/pm ' + by + ', Scrivimi il comando in PM.');
+		}
+		try {
+			var pokedex = require('./pokedex.js').BattlePokedex;
+			var aliases = require('./aliases.js').BattleAliases;
+		} catch (e) {
+			return this.say(con, room, 'Si è verificato un errore: riprova fra qualche secondo.');
+		}
+		var pokemon = arg.toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		if (aliases[pokemon]) pokemon = aliases[pokemon].toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		if (pokedex[pokemon]) {
+			if (pokedex[pokemon].num < 0) text += 'CAP';
+			else if (pokedex[pokemon].num <= 151) text += 'Gen 1';
+			else if (pokedex[pokemon].num <= 251) text += 'Gen 2';
+			else if (pokedex[pokemon].num <= 386) text += 'Gen 3';
+			else if (pokedex[pokemon].num <= 493) text += 'Gen 4';
+			else if (pokedex[pokemon].num <= 649) text += 'Gen 5';
+			else text += 'Gen 6';
+		}
+		else text 
+		this.say(con, room, text);
+	},
+	tier: function(arg, by, room, con) {
+		if (this.canUse('tier', room, by) || room.charAt(0) === ',') {
+			var text = '';
+		}
+		else {
+			return this.say(con, room, '/pm ' + by + ', Scrivimi il comando in PM.');
+		}
+		try {
+			var formatsdata = require('./formats-data.js').BattleFormatsData;
+			var aliases = require('./aliases.js').BattleAliases;
+		} catch (e) {
+			return this.say(con, room, 'Si è verificato un errore: riprova fra qualche secondo.');
+		}
+		var pokemon = arg.toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		if (aliases[pokemon]) pokemon = aliases[pokemon].toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		if (formatsdata[pokemon]) {
+			text += formatsdata[pokemon].tier;
+		}
+		else {
+			text += "Pokémon non trovato";
+		}
+		this.say(con, room, text);
+	},
+	weight: function(arg, by, room, con) {
+		if (this.canUse('weight', room, by) || room.charAt(0) === ',') {
+			var text = '';
+		}
+		else {
+			return this.say(con, room, '/pm ' + by + ', Scrivimi il comando in PM.');
+		}
+		try {
+			var pokedex = require('./pokedex.js').BattlePokedex;
+			var aliases = require('./aliases.js').BattleAliases;
+		} catch (e) {
+			return this.say(con, room, 'Si è verificato un errore: riprova fra qualche secondo.');
+		}
+		var pokemon = arg.toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		if (aliases[pokemon]) pokemon = aliases[pokemon].toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		if (pokedex[pokemon]) {
+			text += pokedex[pokemon].weightkg + " kg. Grass knot/Low kick base power: ";
+			if (pokedex[pokemon].weightkg <= 10) text += "20";
+			else if (pokedex[pokemon].weightkg <= 25) text += "40";
+			else if (pokedex[pokemon].weightkg <= 50) text += "60";
+			else if (pokedex[pokemon].weightkg <= 100) text += "80";
+			else if (pokedex[pokemon].weightkg <= 200) text += "100";
+			else text += "120";
+		}
+		else {
+			text += "Pokémon non trovato";
+		}
+		this.say(con, room, text);
+	},
+	height: function(arg, by, room, con) {
+		if (this.canUse('height', room, by) || room.charAt(0) === ',') {
+			var text = '';
+		}
+		else {
+			return this.say(con, room, '/pm ' + by + ', Scrivimi il comando in PM.');
+		}
+		try {
+			var pokedex = require('./pokedex.js').BattlePokedex;
+			var aliases = require('./aliases.js').BattleAliases;
+		} catch (e) {
+			return this.say(con, room, 'Si è verificato un errore: riprova fra qualche secondo.');
+		}
+		var pokemon = arg.toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		if (aliases[pokemon]) pokemon = aliases[pokemon].toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		if (pokemon.substring(0,4) == "mega") {
+			pokemon = pokemon.substring(4).replace(/[^a-zA-Z0-9]/g,"") + "mega";
+		}
+		if (pokedex[pokemon]) {
+			text += pokedex[pokemon].heightm + " m.";
+		}
+		else {
+			text += "Pokémon non trovato";
+		}
+		this.say(con, room, text);
+	},
+	priority: function(arg, by, room, con) {
+		if (this.canUse('priority', room, by) || room.charAt(0) === ',') {
+			var text = '';
+		}
+		else {
+			return this.say(con, room, '/pm ' + by + ', Scrivimi il comando in PM.');
+		}
+		try {
+			var pokedex = require('./pokedex.js').BattlePokedex;
+			var movedex = require('./moves.js').BattleMovedex;
+			var learnsets = require('./learnsets-g6.js').BattleLearnsets;
+		} catch (e) {
+			return this.say(con, room, 'Si è verificato un errore: riprova fra qualche secondo.');
+		}
+		var arg = arg.toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		if (movedex[arg]) {
+			var priority = movedex[arg].priority;
+			if (priority > 0) priority = "+" + priority;
+			text += priority;
+		}
+		else if (pokedex[arg]) {
+			var prioritymoves = [];
+			var pokemonToCheck = [arg];
+			var i = true;
+			while (i) {
+				if (pokedex[pokemonToCheck[pokemonToCheck.length-1]].prevo) pokemonToCheck.push(pokedex[pokemonToCheck[pokemonToCheck.length-1]].prevo);
+				else i = false;
+			}
+			for (var j in pokemonToCheck) {
+				if (learnsets[pokemonToCheck[j]]) {
+					console.log('ok');
+					for (var k in learnsets[pokemonToCheck[j]].learnset) {
+						if (movedex[k]) {
+							if (movedex[k].priority > 0) {
+								if (prioritymoves.indexOf(movedex[k].name) == -1) {
+									prioritymoves.push(movedex[k].name);
+								}
+							}
+						}
+					}
+				}
+			}
+			prioritymoves.sort();
+			for (var l in prioritymoves) {
+				text += prioritymoves[l];
+				if (l != prioritymoves.length-1) text += ', ';
+			}
+		}
+		else {
+			text += "Non trovato";
+		}
+		this.say(con, room, text);
+	},
+	contact: function(arg, by, room, con) {
+		if (this.canUse('contact', room, by) || room.charAt(0) === ',') {
+			var text = '';
+		}
+		else {
+			return this.say(con, room, '/pm ' + by + ', Scrivimi il comando in PM.');
+		}
+		try {
+			var movedex = require('./moves.js').BattleMovedex;
+		} catch (e) {
+			return this.say(con, room, 'Si è verificato un errore: riprova fra qualche secondo.');
+		}
+		var move = arg.toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		if (movedex[move]) {
+			if (movedex[move].isContact == true) text += "Causa contatto";
+			else text += "Non causa contatto";
+		}
+		else {
+			text += "Mossa non trovata";
+		}
+		this.say(con, room, text);
+	},
+	viablemoves: 'randommoves',
+	randommoves: function(arg, by, room, con) {
+		if (this.canUse('randommoves', room, by) || room.charAt(0) === ',') {
+			var text = '';
+		}
+		else {
+			return this.say(con, room, '/pm ' + by + ', Scrivimi il comando in PM.');
+		}
+		try {
+			var aliases = require('./aliases.js').BattleAliases;
+			var formatsdata = require('./formats-data.js').BattleFormatsData;
+			var movedex = require('./moves.js').BattleMovedex;
+		} catch (e) {
+			return this.say(con, room, 'Si è verificato un errore: riprova fra qualche secondo.');
+		}
+		var pokemon = arg.toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		if (aliases[pokemon]) pokemon = aliases[pokemon].toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		if (formatsdata[pokemon].viableMoves) {
+			moves = '';
+			for (var i in formatsdata[pokemon].viableMoves) {
+				moves += ', ' + movedex[i].name;
+			}
+			text += moves.substring(2);
+		}
+		else {
+			text += "Pokémon non trovato";
+		}
+		this.say(con, room, text);
+	},
+	trad: function(arg, by, room, con) {
+		if (this.canUse('trad', room, by) || room.charAt(0) === ',') {
+			var text = '';
+		}
+		else {
+			return this.say(con, room, '/pm ' + by + ', Scrivimi il comando in PM.');
+		}
+		try {
+			var aliases = require('./aliases.js').BattleAliases;
+		} catch (e) {
+			return this.say(con, room, 'Si è verificato un errore: riprova fra qualche secondo.');
+		}
+		var parola = arg.toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		if (aliases[parola]) parola = aliases[parola].toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		var fs  = require("fs");
+		var trad_ita = fs.readFileSync('trad_ita').toString();
+		var trad_ita_no_space = trad_ita.replace(/[^a-zA-Z0-9,]/g,"").split(',');
+		trad_ita = trad_ita.split(',');
+		var trad_eng = fs.readFileSync('trad_eng').toString();
+		var trad_eng_no_space = trad_eng.replace(/[^a-zA-Z0-9,]/g,"").split(',');
+		trad_eng = trad_eng.split(',');
+		
+		if (trad_ita_no_space.indexOf(parola) != -1) text += trad_eng[trad_ita_no_space.indexOf(parola)];
+		else if (trad_eng_no_space.indexOf(parola) != -1) text += trad_ita[trad_eng_no_space.indexOf(parola)];
+		else text += "Non trovato";
+		this.say(con, room, text);
+	},
+	dexsearch: function(arg, by, room, con) {
+		if (this.canUse('dexsearch', room, by) || room.charAt(0) === ',') {
+			var text = '';
+		}
+		else {
+			return this.say(con, room, '/pm ' + by + ', Scrivimi il comando in PM.');
+		}
+		try {
+			var pokedex = require('./pokedex.js').BattlePokedex;
+			var movedex = require('./moves.js').BattleMovedex;
+			var abilities = require('./abilities.js').BattleAbilities;
+			var formatsdata = require('./formats-data.js').BattleFormatsData;
+			var learnsets = require('./learnsets-g6.js').BattleLearnsets;
+		} catch (e) {
+			return this.say(con, room, 'Si è verificato un errore: riprova fra qualche secondo.');
+		}
+		arg = arg.toLowerCase().replace(/[^a-zA-Z0-9,<>]/g,"").split(',');
+		var j = 0;
+		var k = 0;
+		var checkTier = false;
+		var checkMove = false;
+		var checkAbility = false;
+		var checkType1 = false;
+		var checkType2 = false;
+		var checkBaseSpecies = false;
+		var statNumber = false;
+		var statWhat = false;
+		var checkStat = false;
+		var result = new Array();
+		for (var i = 0; i < arg.length; i++) {
+			if (movedex[arg[i]]) {
+				for (j in learnsets) {
+					for (k in learnsets[j].learnset) {
+						checkMove = k == arg[i];
+						if (checkMove) {
+							result.push(pokedex[j].species);
+						}
+					}
+				}
+			}
+			else if (abilities[arg[i]]) {
+				for (j in pokedex) {
+					for (k in pokedex[j].abilities) {
+						checkAbility = pokedex[j].abilities[k] == abilities[arg[i]].name;
+						if (checkAbility) {
+							result.push(pokedex[j].species);
+						}
+					}
+				}
+			}
+			else if (arg[i].substring(arg[i].length - 4) == 'type') {
+				for (j in pokedex) {
+					checkType1 = pokedex[j].types[0].toLowerCase() == arg[i].substring(0, arg[i].length - 4);
+					if (pokedex[j].types[1]) {
+						checkType2 = pokedex[j].types[1].toLowerCase() == arg[i].substring(0, arg[i].length - 4);
+					}
+					else {
+						checkType2 = false;
+					}
+					if ((checkType1 || checkType2)) {
+						result.push(pokedex[j].species);
+					}
+				}
+			}
+			else if (arg[i].charAt(2) == '>' || arg[i].charAt(3) == '>' || arg[i].charAt(2) == '<' || arg[i].charAt(3) == '<') {
+				for (j in pokedex) {
+					if (arg[i].indexOf('>') != -1) {
+						statNumber = Number(arg[i].substring(arg[i].indexOf('>') + 1));
+						statWhat = arg[i].substring(0, arg[i].indexOf('>'))
+						checkStat = pokedex[j].baseStats[statWhat] > statNumber;
+					}
+					else {
+						statNumber = Number(arg[i].substring(arg[i].indexOf('<') + 1));
+						statWhat = arg[i].substring(0, arg[i].indexOf('<'))
+						checkStat = pokedex[j].baseStats[statWhat] < statNumber;
+					}
+					if (checkStat) {
+						result.push(pokedex[j].species);
+					}
+				}
+			}
+			else return this.say(con, room, "'" + arg[i] + "' could not be found in any of the search categories.");
+		}
+		result = result.sort();
+		var countresult = {};
+		result.forEach(function(r) {
+			countresult[r] = (countresult[r] || 0) + 1;
+		});
+		var text = '';
+		for (var l in countresult) {
+			if (countresult[l] == i) {
+				text += ', ' + l;
+			}
+		}
+		text = text.substring(2);
+		if (text.length > 200) {
+			text = text.substring(0, 200);
+			text = text.substring(0, text.lastIndexOf(','));
+			text += "....";
+		}
+		if (text == '') text = "No Pokémon found.";
+		this.say(con, room, text);
+	},
+	stat: function(arg, by, room, con) {
+		if (this.canUse('stat', room, by) || room.charAt(0) === ',') {
+			var text = '';
+		}
+		else {
+			return this.say(con, room, '/pm ' + by + ', Scrivimi il comando in PM.');
+		}
+		try {
+			var pokedex = require('./pokedex.js').BattlePokedex;
+			var aliases = require('./aliases.js').BattleAliases;
+		} catch (e) {
+			return this.say(con, room, 'Si è verificato un errore: riprova fra qualche secondo.');
+		}
+		
+		if (arg == '') return this.say(con, room, 'Scrivi il Pokémon e la stat da calcolare (ad esempio .stat pikachu, speed');
+		
+		arg = arg.toLowerCase().replace(/[^a-zA-Z0-9,<>+-]/g,"").replace(/  +/g," ").split(',');
+		if (aliases[arg[0]]) arg[0] = aliases[arg[0]].toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		if (aliases[arg[1]]) arg[1] = aliases[arg[1]].toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		
+		if (pokedex[arg[1]]) {
+			var pokemonarg = 1;
+			var statarg = 0;
+		}
+		else if (pokedex[arg[0]]) {
+			var pokemonarg = 0;
+			var statarg = 1;
+		}
+		else return this.say(con, room, 'Pokémon non trovato');
+		
+		if (arg[statarg] == 'attack') arg[statarg] = 'atk';
+		else if (arg[statarg] == 'defense') arg[statarg] = 'def';
+		else if (arg[statarg] == 'specialattack') arg[statarg] = 'spa';
+		else if (arg[statarg] == 'specialdefense') arg[statarg] = 'spd';
+		else if (arg[statarg] == 'speed') arg[statarg] = 'spe';
+		
+		if (pokedex[arg[pokemonarg]].baseStats[arg[statarg]]) base = pokedex[arg[pokemonarg]].baseStats[arg[statarg]];
+		else return this.say(con, room, 'Statistica non trovata: scegli tra attack, defense, special attack, special defense e speed; o le rispettive abbreviazioni');
+		
+		var ev = 252;
+		var iv = 31;
+		var itemBoost = 1;
+		var boost = 1;
+		var nature = 1;
+		var abilityBoost = 1;
+		var level = 100;
+		
+		var item = '';
+		var ability = '';
+		var statboost = '';
+		
+		var evCheck = '';
+		var ivCheck = '';
+		var boostCheck = '';
+		var levelCheck = '';
+		
+		for (var i = 2; i < arg.length; i++) {
+			if (arg[i].substring(0, 6) == 'natura') {
+				if      (arg[i].substring(6) == 'favorevole')  nature = 1.1;
+				else if (arg[i].substring(6) == 'neutra') nature = 1;
+				else if (arg[i].substring(6) == 'sfavorevole') nature = 0.9;
+				else return this.say(con, room, 'Per specificare la natura scegli tra natura favorevole, natura sfavorevole, natura neutra');
+			}
+			else if (arg[i].substring(arg[i].length - 2) == 'ev') {
+				evCheck = Number(arg[i].substring(0, arg[i].length - 2));
+				if (evCheck == 'max' || evCheck == 'full') ev = 252;
+				else if (evCheck >= 0 && evCheck <= 252) ev = evCheck;
+				else return this.say(con, room, "Numero di EV non valido.");
+			}
+			else if (arg[i].substring(arg[i].length - 2) == 'iv') {
+				ivCheck = Number(arg[i].substring(0, arg[i].length - 2));
+				if (ivCheck >= 0 && ivCheck <= 31) iv = ivCheck;
+				else return this.say(con, room, "Numero di IV non valido.");
+			}
+			else if (arg[i] == 'choiceband' || arg[i] == 'choicebanded' || arg[i] == 'band' || arg[i] == 'banded') {
+				if (arg[statarg] == 'atk') {
+					itemBoost = 1.5;
+					item = 'Choice Band';
+				}
+				else return this.say(con, room, 'La Choice Band non influenza la statistica ' + arg[statarg]);
+			}
+			else if (arg[i] == 'choicespecs' || arg[i] == 'choicespecsed' || arg[i] == 'specs' || arg[i] == 'specsed') {
+				if (arg[statarg] == 'spa') {
+					itemBoost = 1.5;
+					item = 'Choice Specs';
+				}
+				else return this.say(con, room, 'La Choice Specs non influenza la statistica ' + arg[statarg]);
+			}
+			else if (arg[i] == 'assaultvest' || arg[i] == 'vest') {
+				if (arg[statarg] == 'spd') {
+					itemBoost = 1.5;
+					item = 'Assault Vest';
+				}
+				else return this.say(con, room, 'L\'Assault Vest non influenza la statistica ' + arg[statarg]);
+			}
+			else if (arg[i] == 'choicescarf' || arg[i] == 'choicescarfed' || arg[i] == 'scarf' || arg[i] == 'scarfed') {
+				if (arg[statarg] == 'spe') {
+					itemBoost = 1.5;
+					item = 'Choice Scarf';
+				}
+				else return this.say(con, room, 'La Choice Scarf non influenza la statistica ' + arg[statarg]);
+			}
+			else if (arg[i] == 'eviolite' || arg[i] == 'evio') {
+				if (arg[statarg] == 'def' || arg[statarg] == 'spd') {
+					itemBoost = 1.5;
+					item = 'Eviolite';
+				}
+				else return this.say(con, room, 'L\'Eviolite non influenza la statistica ' + arg[statarg]);
+			}
+			else if (arg[i].substring(0, 1) == '+') {
+				boostCheck = arg[i].substring(1);
+				statboost = arg[i];
+				if (boostCheck == '1') boost = 1.5;
+				else if (boostCheck == '2') boost = 2;
+				else if (boostCheck == '3') boost = 2.5;
+				else if (boostCheck == '4') boost = 3;
+				else if (boostCheck == '5') boost = 3.5;
+				else if (boostCheck == '6') boost = 4;
+				else return this.say(con, room, "Boost non valido");
+			}
+			else if (arg[i].substring(0, 1) == '-') {
+				boostCheck = arg[i].substring(1);
+				statboost = arg[i];
+				if (boostCheck == '1') boost = 0.75;
+				else if (boostCheck == '2') boost = 0.6;
+				else if (boostCheck == '3') boost = 0.5;
+				else if (boostCheck == '4') boost = 0.43;
+				else if (boostCheck == '5') boost = 0.38;
+				else if (boostCheck == '6') boost = 0.33;
+				else return this.say(con, room, "Drop non valido");
+			}
+			else if (arg[i] == 'hugepower' || arg[i] == 'purepower') {
+				if (arg[statarg] == 'atk') {
+					abilityBoost = 2;
+					if      (arg[i] == 'hugepower') ability = 'Huge Power';
+					else if (arg[i] == 'purepower') ability = 'Pure Power';
+				}
+				else return this.say(con, room, 'Huge Power e Pure Power non influenzano la statistica ' + arg[statarg]);
+			}
+			else if (arg[i] == 'hustle') {
+				if (arg[statarg] == 'atk') {
+					abilityBoost = 1.5;
+					ability = 'Hustle';
+				}
+				else return this.say(con, room, 'Hustle non influenza la statistica ' + arg[statarg]);
+			}
+			else if (arg[i].substring(0, 5) == 'level') {
+				levelCheck = arg[i].substring(5);
+				if (levelCheck >= 1 && levelCheck <= 100) level = levelCheck;
+				else return this.say(con, room, "Livello non valido");
+			}
+			else if (arg[i].substring(0, 7) == 'livello') {
+				levelCheck = arg[i].substring(7);
+				if (levelCheck >= 1 && levelCheck <= 100) level = levelCheck;
+				else return this.say(con, room, "Livello non valido");
+			}
+			else return this.say(con, room, '"' + arg[i] + '" non corrisponde a nessun termine di ricerca');
+		}
+		
+		var stat = Math.floor(Math.floor((((iv + 2*base + ev/4) * level/100) + 5) * nature) * boost * itemBoost * abilityBoost);
+		if (stat == 0) stat = 1;
+		
+		if (pokedex[arg[pokemonarg]].species) text += pokedex[arg[pokemonarg]].species + ' ';
+		else return this.say(con, room, 'Questo errore non si dovrebbe verificare... (errore nome)');
+		
+		if (statboost != '') text += 'a ' + statboost + ', ';
+		
+		text += 'con ';
+		
+		text += ev + 'ev e ';
+		
+		text += iv + 'iv, ';
+		
+		if      (nature == 0.9) text += 'con la natura sfavorevole, ';
+		else if (nature == 1.1) text += 'con la natura favorevole, ';
+		else if (nature == 1) text += ' ';
+		else return this.say(con, room, 'Questo errore non si dovrebbe verificare... (errore nature)');
+		
+		
+		if (item != '') text += item + ', ';
+		
+		if (ability != '') text += ability + ', ';
+		
+		if (level != 100) text += 'al livello ' + level + ' ';
+		
+		text += ' ha ';
+		
+		if      (arg[statarg] == 'atk') text += 'l\'Attacco';
+		else if (arg[statarg] == 'def') text += 'la Difesa';
+		else if (arg[statarg] == 'spa') text += 'l\'Attacco Speciale';
+		else if (arg[statarg] == 'spd') text += 'la Difesa Speciale';
+		else if (arg[statarg] == 'spe') text += 'la Velocità';
+		else return this.say(con, room, 'Questo errore non si dovrebbe verificare... (errore statistiche)');
+		
+		text += ' pari a ' + stat;
+		
+		this.say(con, room, text);
+	},
+	bh: function(arg, by, room, con) {
+		if (!this.canUse('bh', room, by) || room.charAt(0) === ',') return false
+		
+		var text = "In Balanced Hackmons sono bannate le OHKO moves, Wonder Guard, Shadow Tag, Arena Trap, Huge Power, Pure Power, Parental Bond, e c'è l'Ability Clause (non puoi usare due Pokémon con la stessa abilità)";
+		this.say(con, room, text);
+	},
+	tour: 'tours',
+	tours: function(arg, by, room, con) {
+		if (!this.canUse('bh', room, by) || room.charAt(0) === ',') return false
+		
+		var text = "Tornei gratis -> play.pokemonshowdown.com/tournaments";
+		this.say(con, room, text);
+	},
+	
 
 	/**
 	 * Room specific commands
 	 *
 	 * These commands are used in specific rooms on the Smogon server.
 	 */
-	guia: function(arg, by, room, con) {
+	/*guia: function(arg, by, room, con) {
 		// this command is a guide for the Spanish room
 		if (!(toId(room) === 'espaol' && config.serverid === 'showdown')) return false;
 		var text = '';
@@ -494,7 +1160,7 @@ exports.commands = {
 		var text = '';
 		if (!this.canUse('happy', room, by)) text += '/pm ' + by + ', ';
 		this.say(con, room, text + "The Happy Place, at its core, is a friendly environment for anyone just looking for a place to hang out and relax. We also specialize in taking time to give advice on life problems for users. Need a place to feel at home and unwind? Look no further!");
-	},
+	},*/
 
 
 	/**
@@ -505,7 +1171,7 @@ exports.commands = {
 	 */
 
 
-	b: 'buzz',
+	/*b: 'buzz',
 	buzz: function(arg, by, room, con) {
 		if (this.buzzed || !this.canUse('buzz', room, by) || room.charAt(0) === ',') return false;
 		this.say(con, room, '**' + by.substr(1) + ' has buzzed in!**');
@@ -521,5 +1187,5 @@ exports.commands = {
 		clearTimeout(this.buzzer);
 		this.buzzed = '';
 		this.say(con, room, 'The buzzer has been reset.');
-	},
+	},*/
 };
