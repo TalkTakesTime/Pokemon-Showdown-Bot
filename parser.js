@@ -1,4 +1,4 @@
-﻿/**
+/**
  * This is the file where commands get parsed
  *
  * Some parts of this code are taken from the Pokémon Showdown server code, so
@@ -11,6 +11,7 @@
 var sys = require('sys');
 var https = require('https');
 var url = require('url');
+var fs = require('fs');
 
 const ACTION_COOLDOWN = 3*1000;
 const FLOOD_MESSAGE_NUM = 5;
@@ -149,7 +150,37 @@ exports.parse = {
 				}
 
 				ok('logged in as ' + spl[2]);
-
+				
+				var formatsdata = fs.createWriteStream("formats-data.js");
+				https.get("https://play.pokemonshowdown.com/data/formats-data.js", function(res) {
+					res.pipe(formatsdata);
+				});
+				
+				var pokedex = fs.createWriteStream("pokedex.js");
+				https.get("https://play.pokemonshowdown.com/data/pokedex.js", function(res) {
+					res.pipe(pokedex);
+				});
+				
+				var moves = fs.createWriteStream("moves.js");
+				https.get("https://play.pokemonshowdown.com/data/moves.js", function(res) {
+					res.pipe(moves);
+				});
+				
+				var abilities = fs.createWriteStream("abilities.js");
+				https.get("https://play.pokemonshowdown.com/data/abilities.js", function(res) {
+					res.pipe(abilities);
+				});
+				
+				var learnsets = fs.createWriteStream("learnsets-g6.js");
+				https.get("https://play.pokemonshowdown.com/data/learnsets-g6.js", function(res) {
+					res.pipe(learnsets);
+				});
+				
+				var aliases = fs.createWriteStream("aliases.js");
+				https.get("https://play.pokemonshowdown.com/data/aliases.js", function(res) {
+					res.pipe(aliases);
+				});
+				
 				// Now join the rooms
 				var cmds = ['/idle'];
 				for (var i in config.rooms) {
@@ -166,6 +197,8 @@ exports.parse = {
 					}
 					cmds.push('|/join ' + room);
 				}
+				
+				cmds.push("|/avatar 120");
 
 				var self = this;
 				if (cmds.length > 4) {
@@ -237,6 +270,7 @@ exports.parse = {
 		if (room.charAt(0) === ',' && message.substr(0,8) === '/invite ' && this.hasRank(by, '%@&~') && !(config.serverid === 'showdown' && toId(message.substr(8)) === 'lobby')) {
 			this.say(connection, '', '/join ' + message.substr(8));
 		}
+
 		if (message.substr(0, config.commandcharacter.length) !== config.commandcharacter || toId(by) === toId(config.nick)) {
 			return;
 		}
@@ -298,11 +332,13 @@ exports.parse = {
 
 		if (this.settings.blacklist[room][user]) return false;
 		this.settings.blacklist[room][user] = 1;
+		this.writeSettings();
 		return true;
 	},
 	unblacklistUser: function(user, room) {
 		if (!this.isBlacklisted(user, room)) return false;
 		delete this.settings.blacklist[room][user];
+		this.writeSettings();
 		return true;
 	},
 	processChatData: function(user, room, connection, msg) {
@@ -330,7 +366,7 @@ exports.parse = {
 
 			// moderation for spamming "snen" multiple times on a line (a la the snen spammer)
 			var snenMatch = msg.toLowerCase().match(/snen/g);
-			if ((useDefault || this.settings['modding'][room]['snen'] !== 0) && snenMatch && snenMatch.length > 6) {
+			if ((useDefault || this.settings['modding'][room]['snen'] !== false) && snenMatch && snenMatch.length > 6) {
 				if (pointVal < 4) {
 					muteMessage = ', Automated response: possible "snen" spammer';
 					pointVal = (room === 'lobby') ? 5 : 4;
@@ -349,7 +385,7 @@ exports.parse = {
 			// moderation for flooding (more than x lines in y seconds)
 			var isFlooding = (this.chatData[user][room].times.length >= FLOOD_MESSAGE_NUM && (time - this.chatData[user][room].times[this.chatData[user][room].times.length - FLOOD_MESSAGE_NUM]) < FLOOD_MESSAGE_TIME
 				&& (time - this.chatData[user][room].times[this.chatData[user][room].times.length - FLOOD_MESSAGE_NUM]) > (FLOOD_PER_MSG_MIN * FLOOD_MESSAGE_NUM));
-			if ((useDefault || this.settings['modding'][room]['flooding'] !== 0) && isFlooding) {
+			if ((useDefault || this.settings['modding'][room]['flooding'] !== false) && isFlooding) {
 				if (pointVal < 2) {
 					pointVal = 2;
 					muteMessage = ', Automated response: flooding';
@@ -365,7 +401,7 @@ exports.parse = {
 			}
 			// moderation for stretching (over x consecutive characters in the message are the same)
 			var stretchMatch = msg.toLowerCase().match(/(.)\1{7,}/g) || msg.toLowerCase().match(/(..+)\1{4,}/g); // matches the same character (or group of characters) 8 (or 5) or more times in a row
-			if ((useDefault || this.settings['modding'][room]['stretching'] !== 0) && stretchMatch) {
+			if ((useDefault || this.settings['modding'][room]['stretching'] !== false) && stretchMatch) {
 				if (pointVal < 1) {
 					pointVal = 1;
 					muteMessage = ', Automated response: stretching';
@@ -456,7 +492,6 @@ exports.parse = {
 			if (writing) {
 				writePending = true;
 				return;
-
 			}
 			writing = true;
 			var data = JSON.stringify(this.settings);
