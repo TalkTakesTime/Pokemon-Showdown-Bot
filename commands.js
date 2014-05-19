@@ -270,28 +270,50 @@ exports.commands = {
 	viewbans: 'viewblacklist',
 	vab: 'viewblacklist',
 	viewautobans: 'viewblacklist',
+	bl: 'viewblacklist',
 	viewblacklist: function(arg, by, room, con) {
-		if (!this.canUse('autoban', room, by) || room.charAt(0) === ',') return false;
-
+		var self = this;
+		if (!this.hasRank(by, '@&#~') || room.charAt(0) === ',') return false;
 		var text = '';
 		if (!this.settings.blacklist || !this.settings.blacklist[room]) {
-			text = 'No users are blacklisted in this room.';
+			text = 'There\'s no banned users.';
 		} else {
-			if (arg.length) {
-				var nick = toId(arg);
-				if (nick.length < 1 || nick.length > 18) {
-					text = 'Invalid nickname: "' + nick + '".';
-				} else {
-					text = 'User "' + nick + '" is currently ' + (nick in this.settings.blacklist[room] ? '' : 'not ') + 'blacklisted in ' + room + '.';
-				}
-			} else {
-				var nickList = Object.keys(this.settings.blacklist[room]);
-				text = 'The following users are blacklisted: ' + nickList.join(', ');
-				if (text.length > 300) text = 'Too many users to list.';
-				if (!nickList.length) text = 'No users are blacklisted in this room.';
-			}
+			var nickList = Object.keys(this.settings.blacklist[room]);
+			text = 'Here are the blacklisted users: \n \n' + nickList.join('\n');
+			var query = qs.stringify({
+			  api_option: 'paste',
+			  //You just have to create a pastebin account 
+			  //in order to get an API key.
+			  api_dev_key: 'YOUR PASTEBIN API KEY',
+			  api_paste_code: text,
+			  api_paste_name: 'Banlist',
+			  api_paste_private: 1, //Private: yes
+			  api_paste_expire_date: '1D' //Expiration: 1 day
+			});
+
+			var req = http.request({
+			  host: 'pastebin.com',
+			  port: 80,
+			  path: '/api/api_post.php',
+			  method: 'POST',
+			  headers: {
+			    'Content-Type': 'application/x-www-form-urlencoded',
+			    'Content-Length': query.length
+			  }
+			}, function(res) {
+			  var data = '';
+			  res.on('data', function(chunk) {
+			    data += chunk; //pastebin link
+			    self.say(con, room, '/pm '+by+', Banned users: ' +data);
+			  });
+			  res.on('end', function() {
+			    console.log(data);
+			  });
+			});
+
+			req.write(query);
+			req.end();
 		}
-		this.say(con, room, '/pm ' + by + ', ' + text);
 	},
 	banword: function(arg, by, room, con) {
 		if (!this.hasRank(by, '~')) return false;
