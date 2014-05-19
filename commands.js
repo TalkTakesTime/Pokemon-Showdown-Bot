@@ -236,20 +236,16 @@ exports.commands = {
 	},
 	tb: 'timedban',
 	timedban: function(arg, by, room, con){
-		if (!this.hasRank(by, '#~') || room.charAt(0) === ',') return false;
-		var self = this;
+		if (!this.hasRank(by, '@#~') || room.charAt(0) === ',') return false;
 		var opts = arg.split(',');
-		var e = '';
 		var out = by.replace(/^.(\s+)?/, '');
 		arg = toId(arg);
 		if (arg.length > 18) e ='The name must be less than 19 characters.';
-		if (!e && !this.hasRank(this.ranks[toId(room)] + config.nick, '&#~')) e = config.nick + ' requires rank of # or higher.';
-		if (!e) e = this.blacklistUser(arg, room);
 		this.say(con, room, '/roomban ' + opts[0]);
 		this.say(con, room, opts[0]+' was banned for '+opts[1]+' minutes by '+out);
 		this.say(con, room, '/pm ' + opts[0]+', '+out+' has banned you for '+opts[1]+' minutes.');
 		time = opts[1] * 60 * 1000;
-		setTimeout(function(){self.unban(con, room, opts[0])}, time);
+		setTimeout(function(){Parser.utb(con, room, opts[0])}, time);
 	},
 	unblacklist: 'unautoban',
 	unban: 'unautoban',
