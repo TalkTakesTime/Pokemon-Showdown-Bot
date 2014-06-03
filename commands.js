@@ -457,6 +457,8 @@ exports.commands = {
 		}
 		var pokemon = [];
 		var extractedmon = '';
+		var tiers = ['uber', 'ou', 'uu', 'ru', 'nu', 'lc'];
+		if (tiers.indexOf(arg) == -1) return this.say(con, room, 'Tier non trovata');
 		for (var i in formatsdata) {
 			if (formatsdata[i].tier) {
 				if (arg != '') {
@@ -471,7 +473,6 @@ exports.commands = {
 				}
 			}
 		}
-		if (pokemon.length == 0) return this.say(con, room, 'Tier non trovata');
 		extractedmon = pokemon[Math.floor(Math.random()*pokemon.length)];
 		text += extractedmon;
 		this.say(con, room, text);
@@ -490,6 +491,8 @@ exports.commands = {
 		}
 		var pokemon = [];
 		var extractedmon = '';
+		var tiers = ['uber', 'ou', 'uu', 'ru', 'nu', 'lc'];
+		if (tiers.indexOf(arg) == -1) return this.say(con, room, 'Tier non trovata');
 		for (var i in formatsdata) {
 			if (formatsdata[i].tier) {
 				if (arg != '') {
@@ -504,7 +507,6 @@ exports.commands = {
 				}
 			}
 		}
-		if (pokemon.length == 0) return this.say(con, room, 'Tier non trovata');
 		var arrayextracted = new Array();
 		for (var i = 1; i <= 6; i++) {
 			extractedmon = pokemon[Math.floor(Math.random()*pokemon.length)];
