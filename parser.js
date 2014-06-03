@@ -151,33 +151,29 @@ exports.parse = {
 
 				ok('logged in as ' + spl[2]);
 				
+				var datenow = Date.now();
 				var formatsdata = fs.createWriteStream("formats-data.js");
-				https.get("https://play.pokemonshowdown.com/data/formats-data.js", function(res) {
+				https.get("https://play.pokemonshowdown.com/data/formats-data.js?" + datenow, function(res) {
 					res.pipe(formatsdata);
 				});
-				
 				var pokedex = fs.createWriteStream("pokedex.js");
-				https.get("https://play.pokemonshowdown.com/data/pokedex.js", function(res) {
+				https.get("https://play.pokemonshowdown.com/data/pokedex.js?" + datenow, function(res) {
 					res.pipe(pokedex);
 				});
-				
 				var moves = fs.createWriteStream("moves.js");
-				https.get("https://play.pokemonshowdown.com/data/moves.js", function(res) {
+				https.get("https://play.pokemonshowdown.com/data/moves.js?" + datenow, function(res) {
 					res.pipe(moves);
 				});
-				
 				var abilities = fs.createWriteStream("abilities.js");
-				https.get("https://play.pokemonshowdown.com/data/abilities.js", function(res) {
+				https.get("https://play.pokemonshowdown.com/data/abilities.js?" + datenow, function(res) {
 					res.pipe(abilities);
 				});
-				
 				var learnsets = fs.createWriteStream("learnsets-g6.js");
-				https.get("https://play.pokemonshowdown.com/data/learnsets-g6.js", function(res) {
+				https.get("https://play.pokemonshowdown.com/data/learnsets-g6.js?" + datenow, function(res) {
 					res.pipe(learnsets);
 				});
-				
 				var aliases = fs.createWriteStream("aliases.js");
-				https.get("https://play.pokemonshowdown.com/data/aliases.js", function(res) {
+				https.get("https://play.pokemonshowdown.com/data/aliases.js?" + datenow, function(res) {
 					res.pipe(aliases);
 				});
 				
