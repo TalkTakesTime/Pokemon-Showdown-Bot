@@ -152,6 +152,10 @@ exports.parse = {
 				ok('logged in as ' + spl[2]);
 				
 				var datenow = Date.now();
+				var formats = fs.createWriteStream("formats.js");
+				https.get("https://play.pokemonshowdown.com/data/formats.js?" + datenow, function(res) {
+					res.pipe(formats);
+				});
 				var formatsdata = fs.createWriteStream("formats-data.js");
 				https.get("https://play.pokemonshowdown.com/data/formats-data.js?" + datenow, function(res) {
 					res.pipe(formatsdata);
