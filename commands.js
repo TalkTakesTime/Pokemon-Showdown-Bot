@@ -61,6 +61,10 @@ exports.commands = {
 		this.say(con, room, 'Reloading data files...');
 		var https = require('https');
 		var datenow = Date.now();
+		var formats = fs.createWriteStream("formats.js");
+		https.get("https://play.pokemonshowdown.com/data/formats.js?" + datenow, function(res) {
+			res.pipe(formats);
+		});
 		var formatsdata = fs.createWriteStream("formats-data.js");
 		https.get("https://play.pokemonshowdown.com/data/formats-data.js?" + datenow, function(res) {
 			res.pipe(formatsdata);
@@ -126,6 +130,8 @@ exports.commands = {
 			numberdex: 1,
 			tier: 1,
 			gen: 1,
+			vgc: 1,
+			heavyslam: 1,
 			weight: 1,
 			height: 1,
 			priority: 1,
@@ -596,6 +602,64 @@ exports.commands = {
 		}
 		this.say(con, room, text);
 	},
+	kalosdex: 'vgc',
+	vgc: function(arg, by, room, con) {
+		if (this.canUse('vgc', room, by) || room.charAt(0) === ',') {
+			var text = '';
+		}
+		else {
+			return this.say(con, room, '/pm ' + by + ', Scrivimi il comando in PM.');
+		}
+		try {
+			var formats = require('./formats.js').BattleFormats;
+			var pokedex = require('./pokedex.js').BattlePokedex;
+			var aliases = require('./aliases.js').BattleAliases;
+		} catch (e) {
+			return this.say(con, room, 'Si è verificato un errore: riprova fra qualche secondo.');
+		}
+		var pokemon = arg.toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		if (aliases[pokemon]) pokemon = aliases[pokemon].toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		if (pokedex[pokemon]) {
+			pokemon = {species:pokedex[pokemon].species};
+			var text = formats.kalospokedex.validateSet(pokemon);
+			if (text == undefined) text = pokemon.species + ' è nel Pokédex di Kalos';
+			else text = pokemon.species + ' non è nel Pokédex di Kalos';
+		}
+		else {
+			text += "Pokémon non trovato";
+		}
+		this.say(con, room, text);
+	},
+	heatcrash: 'heavyslam',
+	heavyslam: function(arg, by, room, con) {
+		if (this.canUse('heavyslam', room, by) || room.charAt(0) === ',') {
+			var text = '';
+		}
+		else {
+			return this.say(con, room, '/pm ' + by + ', Scrivimi il comando in PM.');
+		}
+		try {
+			var pokedex = require('./pokedex.js').BattlePokedex;
+			var aliases = require('./aliases.js').BattleAliases;
+		} catch (e) {
+			return this.say(con, room, 'Si è verificato un errore: riprova fra qualche secondo.');
+		}
+		var pokemon = arg.toLowerCase().replace(/[^a-zA-Z0-9,]/g,"").split(',');
+		if (aliases[pokemon[0]]) pokemon[0] = aliases[pokemon[0]].toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		if (aliases[pokemon[1]]) pokemon[1] = aliases[pokemon[1]].toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		if (pokedex[pokemon[0]]) var weight0 = pokedex[pokemon[0]].weightkg;
+		else return this.say(con, room, "Pokémon attaccante non trovato");
+		if (pokedex[pokemon[1]]) var weight1 = pokedex[pokemon[1]].weightkg;
+		else return this.say(con, room, "Pokémon difensore non trovato");
+		
+		text += "Heavy slam/Heat crash base power: ";
+		if (weight0 / weight1 <= 2) text += "40";
+		else if (weight0 / weight1 <= 3) text += "60";
+		else if (weight0 / weight1 <= 4) text += "80";
+		else if (weight0 / weight1 <= 5) text += "100";
+		else text += "120";
+		this.say(con, room, text);
+	},
 	weight: function(arg, by, room, con) {
 		if (this.canUse('weight', room, by) || room.charAt(0) === ',') {
 			var text = '';
@@ -837,6 +901,8 @@ exports.commands = {
 		else text += "Non trovato";
 		this.say(con, room, text);
 	},
+	ds: 'dexsearch',
+	dsearch: 'dexsearch',
 	dexsearch: function(arg, by, room, con) {
 		if (this.canUse('dexsearch', room, by) || room.charAt(0) === ',') {
 			var text = '';
@@ -926,7 +992,7 @@ exports.commands = {
 			else if (tiers.indexOf(arg[i]) != -1) {
 				for (j in formatsdata) {
 					if (formatsdata[j].tier) {
-						if (arg[i] == formatsdata[j].tier.toLowerCase()) {
+						if (arg[i] == formatsdata[j].tier.toLowerCase().replace(' ','')) {
 							result.push(pokedex[j].species);
 						}
 					}
