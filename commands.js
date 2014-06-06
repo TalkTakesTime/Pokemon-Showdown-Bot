@@ -1064,9 +1064,9 @@ exports.commands = {
 		
 		var calculator = require('./calc.js');
 		argSend = arg.slice(2);
-		argSend = argSend[1];
+		argSend = argSend;
 		if (arg[statarg] != 'hp') {
-			var results = calculator.calcfunc(argSend, 'stat');
+			var results = calculator.calcfunc(argSend, 'stat', con, room, this);
 			
 			var ev = results[0];
 			var iv = results[1];
@@ -1074,7 +1074,7 @@ exports.commands = {
 			var boost = results[3];
 			var nature = results[4];
 			var abilityBoost = results[5];
-			var level = results[6];
+			var level = Number(results[6]);
 			
 			var item = results[7];
 			var ability = results[8]
@@ -1092,11 +1092,11 @@ exports.commands = {
 			if (stat == 0) stat = 1;
 		}
 		else {
-			var results = calculator.calcfunc(argSend, 'stathp');
+			var results = calculator.calcfunc(argSend, 'stathp', con, room, this);
 			
 			var ev = results[0];
-			var iv = results[0];
-			var level = results[6];
+			var iv = results[1];
+			var level = Number(results[6]);
 			
 			if (ev == -1) ev = 252;
 			if (iv == -1) iv = 31;
@@ -1198,8 +1198,8 @@ exports.commands = {
 			// Holistic judgment
 			Carvanha: 90, Lucario: 72, Genesect: 72, Kyurem: 78
 		};
-		var level = levelScale[pokemon.tier] || 90;
-		if (customScale[pokemon.name]) level = customScale[pokemon.name];
+		var level = levelScale[formatsdata[pokemon].tier] || 90;
+		if (customScale[pokemon]) level = customScale[pokemon];
 		
 		if (pokedex[pokemon].baseStats['hp']) base = pokedex[pokemon].baseStats['hp'];
 		var stat = Math.floor((31 + 2*base + 85/4) * level/100) + 10 + level;
