@@ -1,5 +1,5 @@
 module.exports = {
-	calcfunc: function (arg, what, con, room, self) {
+	calcfunc: function (arg, statarg, what, con, room, self) {
 		try {
 			var pokedex = require('./pokedex.js').BattlePokedex;
 			var aliases = require('./aliases.js').BattleAliases;
@@ -121,52 +121,52 @@ module.exports = {
 			}
 			else if ((arg[i] == 'choiceband' || arg[i] == 'choicebanded' || arg[i] == 'band' || arg[i] == 'banded') && what == 'stat') {
 				if (itemBoost == 0) {
-					if (arg[statarg] == 'atk') {
+					if (statarg == 'atk') {
 						itemBoost = 1.5;
 						item = 'Choice Band';
 					}
-					else return self.say(con, room, 'La Choice Band non influenza la statistica ' + arg[statarg]);
+					else return self.say(con, room, 'La Choice Band non influenza la statistica ' + statarg);
 				}
 				else return self.say(con, room, 'Errore: hai specificato più di un item');
 			}
 			else if ((arg[i] == 'choicespecs' || arg[i] == 'choicespecsed' || arg[i] == 'specs' || arg[i] == 'specsed') && what == 'stat') {
 				if (itemBoost == 0) {
-					if (arg[statarg] == 'spa') {
+					if (statarg == 'spa') {
 						itemBoost = 1.5;
 						item = 'Choice Specs';
 					}
-					else return self.say(con, room, 'La Choice Specs non influenza la statistica ' + arg[statarg]);
+					else return self.say(con, room, 'La Choice Specs non influenza la statistica ' + statarg);
 				}
 				else return self.say(con, room, 'Errore: hai specificato più di un item');
 			}
 			else if ((arg[i] == 'assaultvest' || arg[i] == 'vest') && what == 'stat') {
 				if (itemBoost == 0) {
-					if (arg[statarg] == 'spd') {
+					if (statarg == 'spd') {
 						itemBoost = 1.5;
 						item = 'Assault Vest';
 					}
-					else return self.say(con, room, 'L\'Assault Vest non influenza la statistica ' + arg[statarg]);
+					else return self.say(con, room, 'L\'Assault Vest non influenza la statistica ' + statarg);
 				}
 				else return self.say(con, room, 'Errore: hai specificato più di un item');
 			}
 			else if ((arg[i] == 'choicescarf' || arg[i] == 'choicescarfed' || arg[i] == 'scarf' || arg[i] == 'scarfed') && what == 'stat') {
 				if (itemBoost == 0) {
-					if (arg[statarg] == 'spe') {
+					if (statarg == 'spe') {
 						itemBoost = 1.5;
 						item = 'Choice Scarf';
 					}
-					else return self.say(con, room, 'La Choice Scarf non influenza la statistica ' + arg[statarg]);
+					else return self.say(con, room, 'La Choice Scarf non influenza la statistica ' + statarg);
 				}
 				else return self.say(con, room, 'Errore: hai specificato più di un item');
 			}
 			else if (arg[i] == 'quickpowder' && what == 'stat') {
 				if (itemBoost == 0) {
 					if (arg[pokemonarg] == 'ditto') {
-						if (arg[statarg] == 'spe') {
+						if (statarg == 'spe') {
 							itemBoost = 2;
 							item = 'Quick Powder';
 						}
-						else return self.say(con, room, 'La Quick Powder non influenza la statistica ' + arg[statarg]);
+						else return self.say(con, room, 'La Quick Powder non influenza la statistica ' + statarg);
 					}
 					else return self.say(con, room, 'La Quick Powder ha effetto solo su Ditto; su ' + pokedex[arg[pokemonarg]].species + ' è inutile');
 				}
@@ -174,22 +174,22 @@ module.exports = {
 			}
 			else if (arg[i] == 'ironball' && what == 'stat') {
 				if (itemBoost == 0) {
-					if (arg[statarg] == 'spe') {
+					if (statarg == 'spe') {
 						itemBoost = 0.5;
 						item = 'Iron Ball';
 					}
-					else return self.say(con, room, 'L\'Iron Ball non influenza la statistica ' + arg[statarg]);
+					else return self.say(con, room, 'L\'Iron Ball non influenza la statistica ' + statarg);
 				}
 				else return self.say(con, room, 'Errore: hai specificato più di un item');
 			}
 			else if (arg[i] == 'lightball' && what == 'stat') {
 				if (itemBoost == 0) {
 					if (arg[pokemonarg] == 'pikachu') {
-						if (arg[statarg] == 'atk' || arg[statarg] == 'spa') {
+						if (statarg == 'atk' || statarg == 'spa') {
 							itemBoost = 2;
 							item = 'Light Ball';
 						}
-						else return self.say(con, room, 'La Light Ball non influenza la statistica ' + arg[statarg]);
+						else return self.say(con, room, 'La Light Ball non influenza la statistica ' + statarg);
 					}
 					else return self.say(con, room, 'La Light Ball ha effetto solo su Pikachu; su ' + pokedex[arg[pokemonarg]].species + ' è inutile');
 				}
@@ -198,11 +198,11 @@ module.exports = {
 			else if ((arg[i] == 'eviolite' || arg[i] == 'evio') && what == 'stat') {
 				if (itemBoost == 0) {
 					if (pokedex[arg[pokemonarg]].evos) {
-						if (arg[statarg] == 'def' || arg[statarg] == 'spd') {
+						if (statarg == 'def' || statarg == 'spd') {
 							itemBoost = 1.5;
 							item = 'Eviolite';
 						}
-						else return self.say(con, room, 'L\'Eviolite non influenza la statistica ' + arg[statarg]);
+						else return self.say(con, room, 'L\'Eviolite non influenza la statistica ' + statarg);
 					}
 					else return self.say(con, room, 'L\'Eviolite non ha nessun effetto su ' + pokedex[arg[pokemonarg]].species);
 				}
@@ -211,11 +211,11 @@ module.exports = {
 			else if (arg[i] == 'souldew' && what == 'stat') {
 				if (itemBoost == 0) {
 					if (arg[pokemonarg] == 'latios' || arg[pokemonarg] == 'latias') {
-						if (arg[statarg] == 'spa' || arg[statarg] == 'spd') {
+						if (statarg == 'spa' || statarg == 'spd') {
 							itemBoost = 1.5;
 							item = 'Soul Dew';
 						}
-						else return self.say(con, room, 'La Soul Dew non influenza la statistica ' + arg[statarg]);
+						else return self.say(con, room, 'La Soul Dew non influenza la statistica ' + statarg);
 					}
 					else return self.say(con, room, 'La Soul Dew ha effetto solo su Latias e Latios; su ' + pokedex[arg[pokemonarg]].species + ' è inutile');
 				}
@@ -251,22 +251,22 @@ module.exports = {
 			}
 			else if ((arg[i] == 'hugepower' || arg[i] == 'purepower') && what == 'stat') {
 				if (abilityBoost == 0) {
-					if (arg[statarg] == 'atk') {
+					if (statarg == 'atk') {
 						abilityBoost = 2;
 						if      (arg[i] == 'hugepower') ability = 'Huge Power';
 						else if (arg[i] == 'purepower') ability = 'Pure Power';
 					}
-					else return self.say(con, room, 'Huge Power e Pure Power non influenzano la statistica ' + arg[statarg]);
+					else return self.say(con, room, 'Huge Power e Pure Power non influenzano la statistica ' + statarg);
 				}
 				else return self.say(con, room, 'Errore: hai specificato più di un\'abilità');
 			}
 			else if (arg[i] == 'hustle' && what == 'stat') {
 				if (abilityBoost) {
-					if (arg[statarg] == 'atk') {
+					if (statarg == 'atk') {
 						abilityBoost = 1.5;
 						ability = 'Hustle';
 					}
-					else return self.say(con, room, 'Hustle non influenza la statistica ' + arg[statarg]);
+					else return self.say(con, room, 'Hustle non influenza la statistica ' + statarg);
 				}
 				else return self.say(con, room, 'Errore: hai specificato più di un\'abilità');
 			}
