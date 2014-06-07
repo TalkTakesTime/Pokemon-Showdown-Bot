@@ -1211,6 +1211,8 @@ exports.commands = {
 		
 		this.say(con, room, text);
 	},
+	rstats: 'randomstats',
+	rstat: 'randomstats',
 	randomstats: function(arg, by, room, con) {
 		if (this.canUse('stat', room, by) || room.charAt(0) === ',') {
 			var text = '';
