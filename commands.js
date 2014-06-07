@@ -1229,6 +1229,7 @@ exports.commands = {
 		}
 		var pokemon = arg.toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
 		if (aliases[pokemon]) pokemon = aliases[pokemon].toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		if (!pokedex[pokemon]) return this.say(con, room, 'Pokémon non trovato');
 		var levelScale = {
 			LC: 94,
 			'LC Uber': 92,
@@ -1323,7 +1324,7 @@ exports.commands = {
 		this.say(con, room, text);
 		if (text1) this.say(con, room, text1);
 	},
-	
+
 	guida: function(arg, by, room, con) {
 		if (this.canUse('informations', room, by) || room.charAt(0) === ',') {
 			var text = '';
