@@ -1104,7 +1104,7 @@ exports.commands = {
 		}
 		
 		arg = arg.toLowerCase().replace(/[^a-zA-Z0-9,<>+-]/g,"").split(',');
-		if (!arg[1]) return this.say(con, room, 'Scrivi il Pokémon e la stat da calcolare (ad esempio .stat pikachu, speed');
+		if (!arg[1]) return this.say(con, room, 'Scrivi il Pokémon e la stat da calcolare (ad esempio .stat pikachu, speed)');
 		arg[0] = arg[0].replace(/[+-]/g,"");
 		arg[1] = arg[1].replace(/[+-]/g,"");
 		if (aliases[arg[0]]) arg[0] = aliases[arg[0]].toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
@@ -1324,7 +1324,7 @@ exports.commands = {
 		this.say(con, room, text);
 		if (text1) this.say(con, room, text1);
 	},
-
+	
 	guida: function(arg, by, room, con) {
 		if (this.canUse('informations', room, by) || room.charAt(0) === ',') {
 			var text = '';
