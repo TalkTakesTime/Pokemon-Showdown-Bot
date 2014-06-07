@@ -47,7 +47,7 @@ exports.commands = {
 	 */
 
 	reload: function(arg, by, room, con) {
-		if (!this.hasRank(by, '#~')) return false;
+		if (config.excepts.indexOf(toId(by)) === -1) return false;
 		try {
 			this.uncacheTree('./commands.js');
 			Commands = require('./commands.js').commands;
@@ -57,7 +57,7 @@ exports.commands = {
 		}
 	},
 	reloaddata: function(arg, by, room, con) {
-		if (!this.hasRank(by, '#~')) return false;
+		if (config.excepts.indexOf(toId(by)) === -1) return false;
 		this.say(con, room, 'Reloading data files...');
 		var https = require('https');
 		var datenow = Date.now();
@@ -92,7 +92,7 @@ exports.commands = {
 		this.say(con, room, 'Data files reloaded');
 	},
 	custom: function(arg, by, room, con) {
-		if (!this.hasRank(by, '~')) return false;
+		if (config.excepts.indexOf(toId(by)) === -1) return false;
 		// Custom commands can be executed in an arbitrary room using the syntax
 		// ".custom [room] command", e.g., to do !data pikachu in the room lobby,
 		// the command would be ".custom [lobby] !data pikachu". However, using
@@ -122,7 +122,7 @@ exports.commands = {
 
 	settings: 'set',
 	set: function(arg, by, room, con) {
-		if (!this.hasRank(by, '%@&#~') || room.charAt(0) === ',') return false;
+		if (!this.hasRank(by, '~') || room.charAt(0) === ',') return false;
 
 		var settable = {
 			randompoke: 1,
@@ -630,6 +630,59 @@ exports.commands = {
 		}
 		this.say(con, room, text);
 	},
+	evos: 'evo',
+	evo: function(arg, by, room, con) {
+		if (this.canUse('evo', room, by) || room.charAt(0) === ',') {
+			var text = '';
+		}
+		else {
+			return this.say(con, room, '/pm ' + by + ', Scrivimi il comando in PM.');
+		}
+		try {
+			var pokedex = require('./pokedex.js').BattlePokedex;
+			var aliases = require('./aliases.js').BattleAliases;
+		} catch (e) {
+			return this.say(con, room, 'Si è verificato un errore: riprova fra qualche secondo.');
+		}
+		var pokemon = arg.toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		if (aliases[pokemon]) pokemon = aliases[pokemon].toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		if (pokedex[pokemon]) {
+			if (pokedex[pokemon].evos) {
+				for (var i in pokedex[pokemon].evos) {
+					text += ', ' + pokedex[pokemon].evos[i];
+				}
+				text = text.substring(2);
+			}
+			else text += pokemon + ' non si evolve';
+		}
+		else text += "Pokémon non trovato";
+		this.say(con, room, text);
+	},
+	preevo: 'prevo',
+	prevo: function(arg, by, room, con) {
+		if (this.canUse('evo', room, by) || room.charAt(0) === ',') {
+			var text = '';
+		}
+		else {
+			return this.say(con, room, '/pm ' + by + ', Scrivimi il comando in PM.');
+		}
+		try {
+			var pokedex = require('./pokedex.js').BattlePokedex;
+			var aliases = require('./aliases.js').BattleAliases;
+		} catch (e) {
+			return this.say(con, room, 'Si è verificato un errore: riprova fra qualche secondo.');
+		}
+		var pokemon = arg.toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		if (aliases[pokemon]) pokemon = aliases[pokemon].toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		if (pokedex[pokemon]) {
+			if (pokedex[pokemon].prevo) {
+				text += pokedex[pokemon].prevo;
+			}
+			else text += pokemon + ' non ha una pre-evoluzione';
+		}
+		else text += "Pokémon non trovato";
+		this.say(con, room, text);
+	},
 	heatcrash: 'heavyslam',
 	heavyslam: function(arg, by, room, con) {
 		if (this.canUse('heavyslam', room, by) || room.charAt(0) === ',') {
@@ -740,7 +793,7 @@ exports.commands = {
 			var pokemonToCheck = [arg];
 			var i = true;
 			while (i) {
-				if (pokedex[pokemonToCheck[pokemonToCheck.length-1]].prevo) pokemonToCheck.push(pokedex[pokemonToCheck[pokemonToCheck.length-1]].prevo);
+				if (pokedex[pokemonToCheck[pokemonToCheck.length-1]].prevo) pokemonToCheck.push(pokedex[pokemonToCheck[pokemonToCheck.length-1]].prevo.toLowerCase());
 				else i = false;
 			}
 			for (var j in pokemonToCheck) {
@@ -934,18 +987,32 @@ exports.commands = {
 		var tiers = ['uber', 'ou', 'bl', 'uu', 'bl2', 'ru', 'bl3', 'nu', 'nfe', 'lcuber', 'lc'];
 		var tierNumber = 0;
 		var tierFirst = true;
+		var pokemonToCheck = [];
+		var stop = false;
 		
 		var result = new Array();
 		for (var i = 0; i < arg.length; i++) {
 			if (movedex[arg[i]]) {
 				for (j in learnsets) {
-					for (k in learnsets[j].learnset) {
-						checkMove = k == arg[i];
-						if (checkMove) {
-							result.push(pokedex[j].species);
+					pokemonToCheck = [j];
+					var g = true;
+					while (g) {
+						if (pokedex[pokemonToCheck[pokemonToCheck.length-1]].prevo) pokemonToCheck.push(pokedex[pokemonToCheck[pokemonToCheck.length-1]].prevo.toLowerCase());
+						else g = false;
+					}
+					for (f in pokemonToCheck) {
+						stop = false;
+						for (k in learnsets[pokemonToCheck[f]].learnset) {
+							checkMove = k == arg[i];
+							if (checkMove) {
+								result.push(pokedex[j].species);
+								stop = true;
+							}
 						}
+						if (stop) break;
 					}
 				}
+				pokemonToCheck = [];
 			}
 			else if (abilities[arg[i]]) {
 				for (j in pokedex) {
