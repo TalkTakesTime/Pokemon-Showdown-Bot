@@ -891,7 +891,7 @@ exports.commands = {
 		}
 		this.say(con, room, text);
 	},
-	randommoves: 'viablemoves',
+	moves: 'viablemoves',
 	viablemoves: function(arg, by, room, con) {
 		if (this.canUse('viablemoves', room, by) || room.charAt(0) === ',') {
 			var text = '';
