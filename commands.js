@@ -1133,7 +1133,7 @@ exports.commands = {
 		argSend = arg.slice(2);
 		argSend = argSend;
 		if (arg[statarg] != 'hp') {
-			var results = calculator.calcfunc(argSend, 'stat', con, room, this);
+			var results = calculator.calcfunc(argSend, arg[statarg], 'stat', con, room, this);
 			
 			var ev = results[0];
 			var iv = results[1];
