@@ -172,6 +172,10 @@ exports.parse = {
 				https.get("https://play.pokemonshowdown.com/data/abilities.js?" + datenow, function(res) {
 					res.pipe(abilities);
 				});
+				var items = fs.createWriteStream("items.js");
+				https.get("https://play.pokemonshowdown.com/data/items.js?" + datenow, function(res) {
+					res.pipe(items);
+				});
 				var learnsets = fs.createWriteStream("learnsets-g6.js");
 				https.get("https://play.pokemonshowdown.com/data/learnsets-g6.js?" + datenow, function(res) {
 					res.pipe(learnsets);
