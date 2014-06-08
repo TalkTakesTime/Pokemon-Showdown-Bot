@@ -61,10 +61,9 @@ exports.parse = {
 
 		var spl = message.split('|');
 		if (!spl[1]) {
-			spl = message.split('>');
-			if (!spl[1])
-				return;
-			this.room = spl[1];
+			spl = spl[0].split('>');
+			if (spl[1]) this.room = spl[1];
+			return;
 		}
 
 		switch (spl[1]) {
