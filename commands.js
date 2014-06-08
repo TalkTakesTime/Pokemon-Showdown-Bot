@@ -574,7 +574,10 @@ exports.commands = {
 		}
 		var arg = arg.toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
 		if (aliases[arg]) arg = aliases[arg].toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
-		if (pokedex[arg]) {
+		if (arg == 'metronome') {
+			text += 'Move: Gen 1; Item: Gen 4';
+		}
+		else if (pokedex[arg]) {
 			if (pokedex[arg].num < 0) text += 'CAP';
 			else if (pokedex[arg].num <= 151) text += 'Gen 1';
 			else if (pokedex[arg].num <= 251) text += 'Gen 2';
@@ -602,7 +605,7 @@ exports.commands = {
 		else if (items[arg]) {
 			text += 'Gen ' + items[arg].gen;
 		}
-		else text += 'Nessun Pokemon/Mossa/Abilità con questo nome trovato'
+		else text += 'Nessun Pokemon/mossa/abilità/strumento con questo nome trovato'
 		this.say(con, room, text);
 	},
 	tier: function(arg, by, room, con) {
@@ -1038,7 +1041,10 @@ exports.commands = {
 		var trad_eng_no_space = trad_eng.replace(/[^a-zA-Z0-9,]/g,"").split(',');
 		trad_eng = trad_eng.split(',');
 		
-		if (trad_ita_no_space.indexOf(parola) != -1) text += trad_eng[trad_ita_no_space.indexOf(parola)];
+		if (parola == 'metronome') text += 'Move: metronomo; item: plessimetro';
+		else if (parola == 'metronomo') text += 'metronome (move)';
+		else if (parola == 'plessimetro' ) text += 'metronome (item)';
+		else if (trad_ita_no_space.indexOf(parola) != -1) text += trad_eng[trad_ita_no_space.indexOf(parola)];
 		else if (trad_eng_no_space.indexOf(parola) != -1) text += trad_ita[trad_eng_no_space.indexOf(parola)];
 		else text += "Non trovato";
 		this.say(con, room, text);
