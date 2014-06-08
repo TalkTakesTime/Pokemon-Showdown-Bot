@@ -81,6 +81,10 @@ exports.commands = {
 		https.get("https://play.pokemonshowdown.com/data/abilities.js?" + datenow, function(res) {
 			res.pipe(abilities);
 		});
+		var items = fs.createWriteStream("items.js");
+		https.get("https://play.pokemonshowdown.com/data/items.js?" + datenow, function(res) {
+			res.pipe(items);
+		});
 		var learnsets = fs.createWriteStream("learnsets-g6.js");
 		https.get("https://play.pokemonshowdown.com/data/learnsets-g6.js?" + datenow, function(res) {
 			res.pipe(learnsets);
@@ -552,7 +556,7 @@ exports.commands = {
 		if (text == '') text = 'Pokémon non trovato';
 		this.say(con, room, text);
 	},
-	gen: function(arg, by, room, con) {
+    gen: function(arg, by, room, con) {
 		if (this.canUse('gen', room, by) || room.charAt(0) === ',') {
 			var text = '';
 		}
@@ -562,21 +566,43 @@ exports.commands = {
 		try {
 			var pokedex = require('./pokedex.js').BattlePokedex;
 			var aliases = require('./aliases.js').BattleAliases;
+			var movedex = require('./moves.js').BattleMovedex;
+			var abilities = require('./abilities.js').BattleAbilities;
+			var items = require('./items.js').BattleItems;
 		} catch (e) {
 			return this.say(con, room, 'Si è verificato un errore: riprova fra qualche secondo.');
 		}
-		var pokemon = arg.toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
-		if (aliases[pokemon]) pokemon = aliases[pokemon].toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
-		if (pokedex[pokemon]) {
-			if (pokedex[pokemon].num < 0) text += 'CAP';
-			else if (pokedex[pokemon].num <= 151) text += 'Gen 1';
-			else if (pokedex[pokemon].num <= 251) text += 'Gen 2';
-			else if (pokedex[pokemon].num <= 386) text += 'Gen 3';
-			else if (pokedex[pokemon].num <= 493) text += 'Gen 4';
-			else if (pokedex[pokemon].num <= 649) text += 'Gen 5';
+		var arg = arg.toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		if (aliases[arg]) arg = aliases[arg].toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		if (pokedex[arg]) {
+			if (pokedex[arg].num < 0) text += 'CAP';
+			else if (pokedex[arg].num <= 151) text += 'Gen 1';
+			else if (pokedex[arg].num <= 251) text += 'Gen 2';
+			else if (pokedex[arg].num <= 386) text += 'Gen 3';
+			else if (pokedex[arg].num <= 493) text += 'Gen 4';
+			else if (pokedex[arg].num <= 649) text += 'Gen 5';
 			else text += 'Gen 6';
 		}
-		else text 
+		else if (movedex[arg]) {
+			if (movedex[arg].num <= 165) text += 'Gen 1';
+			else if (movedex[arg].num <= 251) text += 'Gen 2';
+			else if (movedex[arg].num <= 354) text += 'Gen 3';
+			else if (movedex[arg].num <= 467) text += 'Gen 4';
+			else if (movedex[arg].num <= 559) text += 'Gen 5';
+			else if (movedex[arg].num <= 617) text += 'Gen 6';
+			else text += 'CAP';
+		}
+		else if (abilities[arg]) {
+			if (abilities[arg].num <= 0) text += 'CAP';
+			else if (abilities[arg].num <= 76) text += 'Gen 3';
+			else if (abilities[arg].num <= 123) text += 'Gen 4';
+			else if (abilities[arg].num <= 164) text += 'Gen 5';
+			else text += 'Gen 6';
+		}
+		else if (items[arg]) {
+			text += 'Gen ' + items[arg].gen;
+		}
+		else text += 'Nessun Pokemon/Mossa/Abilità con questo nome trovato'
 		this.say(con, room, text);
 	},
 	tier: function(arg, by, room, con) {
@@ -822,7 +848,7 @@ exports.commands = {
 		this.say(con, room, text);
 	},
 	boosting: function(arg, by, room, con) {
-		if (this.canUse('contact', room, by) || room.charAt(0) === ',') {
+		if (this.canUse('boosting', room, by) || room.charAt(0) === ',') {
 			var text = '';
 		}
 		else {
@@ -867,6 +893,69 @@ exports.commands = {
 			text += "Non trovato";
 		}
 		if (text == '') text = 'Nessuna boosting move trovata';
+		this.say(con, room, text);
+	},
+	recovery: function(arg, by, room, con) {
+		if (this.canUse('recovery', room, by) || room.charAt(0) === ',') {
+			var text = '';
+		}
+		else {
+			return this.say(con, room, '/pm ' + by + ', Scrivimi il comando in PM.');
+		}
+		try {
+			var pokedex = require('./pokedex.js').BattlePokedex;
+			var movedex = require('./moves.js').BattleMovedex;
+			var learnsets = require('./learnsets-g6.js').BattleLearnsets;
+		} catch (e) {
+			return this.say(con, room, 'Si è verificato un errore: riprova fra qualche secondo.');
+		}
+		var arg = arg.toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		if (pokedex[arg]) {
+			var recoverymoves = [];
+			var drainmoves = [];
+			var pokemonToCheck = [arg];
+			var i = true;
+			while (i) {
+				if (pokedex[pokemonToCheck[pokemonToCheck.length-1]].prevo) pokemonToCheck.push(pokedex[pokemonToCheck[pokemonToCheck.length-1]].prevo);
+				else i = false;
+			}
+			for (var j in pokemonToCheck) {
+				if (learnsets[pokemonToCheck[j]]) {
+					for (var k in learnsets[pokemonToCheck[j]].learnset) {
+						if (movedex[k]) {
+							if (movedex[k].heal || k == "synthesis" || k == "moonlight" || k == "morningsun" || k == "wish" || k == "swallow") {
+								if (recoverymoves.indexOf(movedex[k].name) == -1) {
+									recoverymoves.push(movedex[k].name);
+								}
+							}
+							else if (movedex[k].drain) {
+								if (drainmoves.indexOf(movedex[k].name) == -1) {
+									drainmoves.push(movedex[k].name);
+								}
+							}
+						}
+					}
+				}
+			}
+			recoverymoves.sort();
+			for (var l in recoverymoves) {
+				text += recoverymoves[l];
+				if (l != recoverymoves.length-1 || drainmoves.length > 0) text += ', ';
+			}
+			if (drainmoves.length > 0) {
+				drainmoves.sort();
+				text += '__';
+				for (var k in drainmoves) {
+					text += drainmoves[k];
+					if (k != drainmoves.length-1) text += ', ';
+				}
+				text += '__';
+			}
+		}
+		else {
+			text += "Non trovato";
+		}
+		if (text == '') text = 'Nessuna recovery move trovata';
 		this.say(con, room, text);
 	},
 	contact: function(arg, by, room, con) {
@@ -954,6 +1043,7 @@ exports.commands = {
 		else text += "Non trovato";
 		this.say(con, room, text);
 	},
+	
 	ds: 'dexsearch',
 	dsearch: 'dexsearch',
 	dexsearch: function(arg, by, room, con) {
@@ -1269,7 +1359,7 @@ exports.commands = {
 			Carvanha: 90, Lucario: 72, Genesect: 72, Kyurem: 78
 		};
 		var level = levelScale[formatsdata[pokemon].tier] || 90;
-		if (customScale[pokemon]) level = customScale[pokemon];
+		if (customScale[pokedex[pokemon].species]) level = customScale[pokedex[pokemon].species];
 		
 		if (pokedex[pokemon].baseStats['hp']) base = pokedex[pokemon].baseStats['hp'];
 		var stat = Math.floor((31 + 2*base + 85/4) * level/100) + 10 + level;
