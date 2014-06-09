@@ -186,7 +186,7 @@ exports.parse = {
 				});
 				
 				// Now join the rooms
-				var cmds = ['/idle'];
+				var cmds = ['|/idle'];
 				for (var i in config.rooms) {
 					var room = toId(config.rooms[i]);
 					if (room === 'lobby' && config.serverid === 'showdown') {
