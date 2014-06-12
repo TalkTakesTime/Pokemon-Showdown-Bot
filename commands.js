@@ -659,59 +659,6 @@ exports.commands = {
 		}
 		this.say(con, room, text);
 	},
-	evos: 'evo',
-	evo: function(arg, by, room, con) {
-		if (this.canUse('evo', room, by) || room.charAt(0) === ',') {
-			var text = '';
-		}
-		else {
-			return this.say(con, room, '/pm ' + by + ', Scrivimi il comando in PM.');
-		}
-		try {
-			var pokedex = require('./pokedex.js').BattlePokedex;
-			var aliases = require('./aliases.js').BattleAliases;
-		} catch (e) {
-			return this.say(con, room, 'Si è verificato un errore: riprova fra qualche secondo.');
-		}
-		var pokemon = arg.toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
-		if (aliases[pokemon]) pokemon = aliases[pokemon].toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
-		if (pokedex[pokemon]) {
-			if (pokedex[pokemon].evos) {
-				for (var i in pokedex[pokemon].evos) {
-					text += ', ' + pokedex[pokemon].evos[i];
-				}
-				text = text.substring(2);
-			}
-			else text += pokemon + ' non si evolve';
-		}
-		else text += "Pokémon non trovato";
-		this.say(con, room, text);
-	},
-	preevo: 'prevo',
-	prevo: function(arg, by, room, con) {
-		if (this.canUse('evo', room, by) || room.charAt(0) === ',') {
-			var text = '';
-		}
-		else {
-			return this.say(con, room, '/pm ' + by + ', Scrivimi il comando in PM.');
-		}
-		try {
-			var pokedex = require('./pokedex.js').BattlePokedex;
-			var aliases = require('./aliases.js').BattleAliases;
-		} catch (e) {
-			return this.say(con, room, 'Si è verificato un errore: riprova fra qualche secondo.');
-		}
-		var pokemon = arg.toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
-		if (aliases[pokemon]) pokemon = aliases[pokemon].toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
-		if (pokedex[pokemon]) {
-			if (pokedex[pokemon].prevo) {
-				text += pokedex[pokemon].prevo;
-			}
-			else text += pokemon + ' non ha una pre-evoluzione';
-		}
-		else text += "Pokémon non trovato";
-		this.say(con, room, text);
-	},
 	heatcrash: 'heavyslam',
 	heavyslam: function(arg, by, room, con) {
 		if (this.canUse('heavyslam', room, by) || room.charAt(0) === ',') {
@@ -786,15 +733,89 @@ exports.commands = {
 		}
 		var pokemon = arg.toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
 		if (aliases[pokemon]) pokemon = aliases[pokemon].toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
-		if (pokemon.substring(0,4) == "mega") {
-			pokemon = pokemon.substring(4).replace(/[^a-zA-Z0-9]/g,"") + "mega";
-		}
 		if (pokedex[pokemon]) {
 			text += pokedex[pokemon].heightm + " m.";
 		}
 		else {
 			text += "Pokémon non trovato";
 		}
+		this.say(con, room, text);
+	},
+	colour: 'color',
+	color: function(arg, by, room, con) {
+		if (this.canUse('color', room, by) || room.charAt(0) === ',') {
+			var text = '';
+		}
+		else {
+			return this.say(con, room, '/pm ' + by + ', Scrivimi il comando in PM.');
+		}
+		try {
+			var pokedex = require('./pokedex.js').BattlePokedex;
+			var aliases = require('./aliases.js').BattleAliases;
+		} catch (e) {
+			return this.say(con, room, 'Si è verificato un errore: riprova fra qualche secondo.');
+		}
+		var pokemon = arg.toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		if (aliases[pokemon]) pokemon = aliases[pokemon].toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		if (pokedex[pokemon]) {
+			text += pokedex[pokemon].color;
+		}
+		else {
+			text += "Pokémon non trovato";
+		}
+		this.say(con, room, text);
+	},
+	evos: 'evo',
+	evo: function(arg, by, room, con) {
+		if (this.canUse('evo', room, by) || room.charAt(0) === ',') {
+			var text = '';
+		}
+		else {
+			return this.say(con, room, '/pm ' + by + ', Scrivimi il comando in PM.');
+		}
+		try {
+			var pokedex = require('./pokedex.js').BattlePokedex;
+			var aliases = require('./aliases.js').BattleAliases;
+		} catch (e) {
+			return this.say(con, room, 'Si è verificato un errore: riprova fra qualche secondo.');
+		}
+		var pokemon = arg.toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		if (aliases[pokemon]) pokemon = aliases[pokemon].toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		if (pokedex[pokemon]) {
+			if (pokedex[pokemon].evos) {
+				for (var i in pokedex[pokemon].evos) {
+					text += ', ' + pokedex[pokemon].evos[i];
+				}
+				text = text.substring(2);
+			}
+			else text += pokemon + ' non si evolve';
+		}
+		else text += "Pokémon non trovato";
+		this.say(con, room, text);
+	},
+	preevo: 'prevo',
+	prevo: function(arg, by, room, con) {
+		if (this.canUse('evo', room, by) || room.charAt(0) === ',') {
+			var text = '';
+		}
+		else {
+			return this.say(con, room, '/pm ' + by + ', Scrivimi il comando in PM.');
+		}
+		try {
+			var pokedex = require('./pokedex.js').BattlePokedex;
+			var aliases = require('./aliases.js').BattleAliases;
+		} catch (e) {
+			return this.say(con, room, 'Si è verificato un errore: riprova fra qualche secondo.');
+		}
+		var pokemon = arg.toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		if (aliases[pokemon]) pokemon = aliases[pokemon].toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		if (pokedex[pokemon]) {
+			if (pokedex[pokemon].prevo) {
+				text += pokedex[pokemon].prevo;
+			}
+			else text += pokemon + ' non ha una pre-evoluzione';
+		}
+		else text += "Pokémon non trovato";
 		this.say(con, room, text);
 	},
 	priority: function(arg, by, room, con) {
@@ -959,6 +980,73 @@ exports.commands = {
 			text += "Non trovato";
 		}
 		if (text == '') text = 'Nessuna recovery move trovata';
+		this.say(con, room, text);
+	},
+	typelearn: function(arg, by, room, con) {
+		if (this.canUse('typelearn', room, by) || room.charAt(0) === ',') {
+			var text = '';
+		}
+		else {
+			return this.say(con, room, '/pm ' + by + ', Scrivimi il comando in PM.');
+		}
+		try {
+			var pokedex = require('./pokedex.js').BattlePokedex;
+			var aliases = require('./aliases.js').BattleAliases;
+			var movedex = require('./moves.js').BattleMovedex;
+			var learnsets = require('./learnsets-g6.js').BattleLearnsets;
+		} catch (e) {
+			return this.say(con, room, 'Si è verificato un errore: riprova fra qualche secondo.');
+		}
+		
+		arg = arg.toLowerCase().replace(/[^a-zA-Z0-9,<>+-]/g,"").split(',');
+		if (!arg[1]) return this.say(con, room, 'Scrivi il Pokémon e il tipo');
+		arg[0] = arg[0].replace(/[+-]/g,"");
+		arg[1] = arg[1].replace(/[+-]/g,"");
+		if (aliases[arg[0]]) arg[0] = aliases[arg[0]].toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		if (aliases[arg[1]]) arg[1] = aliases[arg[1]].toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		
+		if (pokedex[arg[1]]) {
+			var pokemonarg = 1;
+			var typearg = 0;
+		}
+		else if (pokedex[arg[0]]) {
+			var pokemonarg = 0;
+			var typearg = 1;
+		}
+		else return this.say(con, room, 'Pokémon non trovato');
+		var types = ['bug', 'dark', 'dragon', 'electric', 'fairy', 'fight', 'fire', 'flying', 'ghost', 'grass', 'ground', 'ice', 'normal', 'poison', 'psychic', 'rock', 'steel', 'water'];
+		if (types.indexOf(arg[typearg]) == -1) return this.say(con, room, 'Tipo non trovato');
+		if (pokedex[arg[pokemonarg]]) {
+			var typemoves = [];
+			var pokemonToCheck = [arg[pokemonarg]];
+			var i = true;
+			while (i) {
+				if (pokedex[pokemonToCheck[pokemonToCheck.length-1]].prevo) pokemonToCheck.push(pokedex[pokemonToCheck[pokemonToCheck.length-1]].prevo);
+				else i = false;
+			}
+			for (var j in pokemonToCheck) {
+				if (learnsets[pokemonToCheck[j]]) {
+					for (var k in learnsets[pokemonToCheck[j]].learnset) {
+						if (movedex[k]) {
+							if (movedex[k].type.toLowerCase() == arg[typearg] && movedex[k].basePower > 0) {
+								if (typemoves.indexOf(movedex[k].name) == -1) {
+									typemoves.push(movedex[k].name);
+								}
+							}
+						}
+					}
+				}
+			}
+			typemoves.sort();
+			for (var l in typemoves) {
+				text += typemoves[l];
+				if (l != typemoves.length-1) text += ', ';
+			}
+		}
+		else {
+			text += "Non trovato";
+		}
+		if (text == '') text = 'Nessuna ' + arg[typearg] + ' move trovata';
 		this.say(con, room, text);
 	},
 	contact: function(arg, by, room, con) {
@@ -1255,7 +1343,7 @@ exports.commands = {
 			if (stat == 0) stat = 1;
 		}
 		else {
-			var results = calculator.calcfunc(argSend, 'stathp', con, room, this);
+			var results = calculator.calcfunc(argSend, arg[statarg], 'stathp', con, room, this);
 			
 			var ev = results[0];
 			var iv = results[1];
