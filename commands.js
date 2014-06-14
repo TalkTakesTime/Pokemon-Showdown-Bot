@@ -1028,7 +1028,7 @@ exports.commands = {
 				if (learnsets[pokemonToCheck[j]]) {
 					for (var k in learnsets[pokemonToCheck[j]].learnset) {
 						if (movedex[k]) {
-							if (movedex[k].type.toLowerCase() == arg[typearg] && movedex[k].basePower > 0) {
+							if (movedex[k].type.toLowerCase() == arg[typearg] && (movedex[k].basePower > 0 || k == 'return' || k == 'frustration')) {
 								if (typemoves.indexOf(movedex[k].name) == -1) {
 									typemoves.push(movedex[k].name);
 								}
