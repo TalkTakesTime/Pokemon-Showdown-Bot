@@ -126,7 +126,7 @@ exports.commands = {
 
 	settings: 'set',
 	set: function(arg, by, room, con) {
-		if (!this.hasRank(by, '~') || room.charAt(0) === ',') return false;
+		if (!this.hasRank(by, '%@&#~') || room.charAt(0) === ',') return false;
 
 		var settable = {
 			randompoke: 1,
@@ -163,7 +163,7 @@ exports.commands = {
 			if (!this.settings['modding']) this.settings['modding'] = {};
 			if (!this.settings['modding'][room]) this.settings['modding'][room] = {};
 			if (opts[2] && toId(opts[2])) {
-				if (!this.hasRank(by, '#~')) return false;
+				if (!config.excepts.indexOf(toId(by)) === -1) return false;
 				if (!(toId(opts[2]) in {on: 1, off: 1}))  return this.say(con, room, 'Incorrect command: correct syntax is .set mod, [' +
 					Object.keys(modOpts).join('/') + '](, [on/off])');
 				if (toId(opts[2]) === 'off') {
@@ -229,7 +229,7 @@ exports.commands = {
 				this.say(con, room, msg);
 				return;
 			} else {
-				if (!this.hasRank(by, '#~')) return false;
+				if (!config.excepts.indexOf(toId(by)) === -1) return false;
 				var newRank = opts[1].trim();
 				if (!(newRank in settingsLevels)) return this.say(con, room, 'Unknown option: "' + newRank + '". Valid settings are: off/disable, +, %, @, &, #, ~, on/enable.');
 				if (!this.settings[cmd]) this.settings[cmd] = {};
@@ -543,8 +543,6 @@ exports.commands = {
 		} catch (e) {
 			return this.say(con, room, 'Si è verificato un errore: riprova fra qualche secondo.');
 		}
-		var pokemon = arg.toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
-		if (aliases[pokemon]) pokemon = aliases[pokemon].toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
 		for (var i in pokedex) {
 			if (pokedex[i].num) {
 				if (pokedex[i].num == arg) {
@@ -572,8 +570,8 @@ exports.commands = {
 		} catch (e) {
 			return this.say(con, room, 'Si è verificato un errore: riprova fra qualche secondo.');
 		}
-		var arg = arg.toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
-		if (aliases[arg]) arg = aliases[arg].toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		var arg = toId(arg);
+		if (aliases[arg]) arg = toId(aliases[arg]);
 		if (arg == 'metronome') {
 			text += 'Move: Gen 1; Item: Gen 4';
 		}
@@ -621,8 +619,8 @@ exports.commands = {
 		} catch (e) {
 			return this.say(con, room, 'Si è verificato un errore: riprova fra qualche secondo.');
 		}
-		var pokemon = arg.toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
-		if (aliases[pokemon]) pokemon = aliases[pokemon].toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		var pokemon = toId(arg);
+		if (aliases[pokemon]) pokemon = toId(aliases[pokemon]);
 		if (formatsdata[pokemon]) {
 			text += formatsdata[pokemon].tier;
 		}
@@ -646,8 +644,8 @@ exports.commands = {
 		} catch (e) {
 			return this.say(con, room, 'Si è verificato un errore: riprova fra qualche secondo.');
 		}
-		var pokemon = arg.toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
-		if (aliases[pokemon]) pokemon = aliases[pokemon].toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		var pokemon = toId(arg);
+		if (aliases[pokemon]) pokemon = toId(aliases[pokemon]);
 		if (pokedex[pokemon]) {
 			pokemon = {species:pokedex[pokemon].species};
 			var text = formats.kalospokedex.validateSet(pokemon);
@@ -673,9 +671,9 @@ exports.commands = {
 		} catch (e) {
 			return this.say(con, room, 'Si è verificato un errore: riprova fra qualche secondo.');
 		}
-		var pokemon = arg.toLowerCase().replace(/[^a-zA-Z0-9,]/g,"").split(',');
-		if (aliases[pokemon[0]]) pokemon[0] = aliases[pokemon[0]].toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
-		if (aliases[pokemon[1]]) pokemon[1] = aliases[pokemon[1]].toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		var pokemon = toId(arg).split(',');
+		if (aliases[pokemon[0]]) pokemon[0] = toId(aliases[pokemon[0]]);
+		if (aliases[pokemon[1]]) pokemon[1] = toId(aliases[pokemon[1]]);
 		if (pokedex[pokemon[0]]) var weight0 = pokedex[pokemon[0]].weightkg;
 		else return this.say(con, room, "Pokémon attaccante non trovato");
 		if (pokedex[pokemon[1]]) var weight1 = pokedex[pokemon[1]].weightkg;
@@ -702,8 +700,8 @@ exports.commands = {
 		} catch (e) {
 			return this.say(con, room, 'Si è verificato un errore: riprova fra qualche secondo.');
 		}
-		var pokemon = arg.toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
-		if (aliases[pokemon]) pokemon = aliases[pokemon].toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		var pokemon = toId(arg);
+		if (aliases[pokemon]) pokemon = toId(aliases[pokemon]);
 		if (pokedex[pokemon]) {
 			text += pokedex[pokemon].weightkg + " kg. Grass knot/Low kick base power: ";
 			if (pokedex[pokemon].weightkg <= 10) text += "20";
@@ -731,8 +729,8 @@ exports.commands = {
 		} catch (e) {
 			return this.say(con, room, 'Si è verificato un errore: riprova fra qualche secondo.');
 		}
-		var pokemon = arg.toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
-		if (aliases[pokemon]) pokemon = aliases[pokemon].toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		var pokemon = toId(arg);
+		if (aliases[pokemon]) pokemon = toId(aliases[pokemon]);
 		if (pokedex[pokemon]) {
 			text += pokedex[pokemon].heightm + " m.";
 		}
@@ -755,8 +753,8 @@ exports.commands = {
 		} catch (e) {
 			return this.say(con, room, 'Si è verificato un errore: riprova fra qualche secondo.');
 		}
-		var pokemon = arg.toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
-		if (aliases[pokemon]) pokemon = aliases[pokemon].toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		var pokemon = toId(arg);
+		if (aliases[pokemon]) pokemon = toId(aliases[pokemon]);
 		if (pokedex[pokemon]) {
 			text += pokedex[pokemon].color;
 		}
@@ -779,8 +777,8 @@ exports.commands = {
 		} catch (e) {
 			return this.say(con, room, 'Si è verificato un errore: riprova fra qualche secondo.');
 		}
-		var pokemon = arg.toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
-		if (aliases[pokemon]) pokemon = aliases[pokemon].toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		var pokemon = toId(arg);
+		if (aliases[pokemon]) pokemon = toId(aliases[pokemon]);
 		if (pokedex[pokemon]) {
 			if (pokedex[pokemon].evos) {
 				for (var i in pokedex[pokemon].evos) {
@@ -807,8 +805,8 @@ exports.commands = {
 		} catch (e) {
 			return this.say(con, room, 'Si è verificato un errore: riprova fra qualche secondo.');
 		}
-		var pokemon = arg.toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
-		if (aliases[pokemon]) pokemon = aliases[pokemon].toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		var pokemon = toId(arg);
+		if (aliases[pokemon]) pokemon = toId(aliases[pokemon]);
 		if (pokedex[pokemon]) {
 			if (pokedex[pokemon].prevo) {
 				text += pokedex[pokemon].prevo;
@@ -829,10 +827,13 @@ exports.commands = {
 			var pokedex = require('./pokedex.js').BattlePokedex;
 			var movedex = require('./moves.js').BattleMovedex;
 			var learnsets = require('./learnsets-g6.js').BattleLearnsets;
+			var aliases = require('./aliases.js').BattleAliases;
 		} catch (e) {
 			return this.say(con, room, 'Si è verificato un errore: riprova fra qualche secondo.');
 		}
-		var arg = arg.toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		var arg = toId(arg);
+		if (aliases[arg]) arg = toId(aliases[arg]);
+
 		if (movedex[arg]) {
 			var priority = movedex[arg].priority;
 			if (priority > 0) priority = "+" + priority;
@@ -885,7 +886,9 @@ exports.commands = {
 		} catch (e) {
 			return this.say(con, room, 'Si è verificato un errore: riprova fra qualche secondo.');
 		}
-		var arg = arg.toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		var arg = toId(arg);
+		if (aliases[arg]) arg = toId(aliases[arg]);
+
 		if (pokedex[arg]) {
 			var boostingmoves = [];
 			var pokemonToCheck = [arg];
@@ -933,7 +936,9 @@ exports.commands = {
 		} catch (e) {
 			return this.say(con, room, 'Si è verificato un errore: riprova fra qualche secondo.');
 		}
-		var arg = arg.toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		var arg = toId(arg);
+		if (aliases[arg]) arg = toId(aliases[arg]);
+
 		if (pokedex[arg]) {
 			var recoverymoves = [];
 			var drainmoves = [];
@@ -998,12 +1003,12 @@ exports.commands = {
 			return this.say(con, room, 'Si è verificato un errore: riprova fra qualche secondo.');
 		}
 		
-		arg = arg.toLowerCase().replace(/[^a-zA-Z0-9,<>+-]/g,"").split(',');
+		arg = toId(arg).split(',');
 		if (!arg[1]) return this.say(con, room, 'Scrivi il Pokémon e il tipo');
 		arg[0] = arg[0].replace(/[+-]/g,"");
 		arg[1] = arg[1].replace(/[+-]/g,"");
-		if (aliases[arg[0]]) arg[0] = aliases[arg[0]].toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
-		if (aliases[arg[1]]) arg[1] = aliases[arg[1]].toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		if (aliases[arg[0]]) arg[0] = toId(aliases[arg[0]]);
+		if (aliases[arg[1]]) arg[1] = toId(aliases[arg[1]]);
 		
 		if (pokedex[arg[1]]) {
 			var pokemonarg = 1;
@@ -1061,7 +1066,8 @@ exports.commands = {
 		} catch (e) {
 			return this.say(con, room, 'Si è verificato un errore: riprova fra qualche secondo.');
 		}
-		var move = arg.toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		var move = toId(arg);
+		if (aliases[move]) move = toId(aliases[move]);
 		if (movedex[move]) {
 			if (movedex[move].isContact == true) text += "Causa contatto";
 			else text += "Non causa contatto";
@@ -1086,8 +1092,8 @@ exports.commands = {
 		} catch (e) {
 			return this.say(con, room, 'Si è verificato un errore: riprova fra qualche secondo.');
 		}
-		var pokemon = arg.toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
-		if (aliases[pokemon]) pokemon = aliases[pokemon].toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		var pokemon = toId(pokemon);
+		if (aliases[pokemon]) pokemon = toId(aliases[pokemon]);
 		if (formatsdata[pokemon]) {
 			if (formatsdata[pokemon].viableMoves) {
 				moves = '';
@@ -1119,14 +1125,14 @@ exports.commands = {
 		}
 		
 		if (arg == '') return this.say(con, room, 'Cosa devo tradurre?');
-		var parola = arg.toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
-		if (aliases[parola]) parola = aliases[parola].toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		var parola = toId(arg);
+		if (aliases[parola]) parola = toId(aliases[parola]);
 		var fs  = require("fs");
 		var trad_ita = fs.readFileSync('trad_ita').toString();
-		var trad_ita_no_space = trad_ita.replace(/[^a-zA-Z0-9,]/g,"").split(',');
+		var trad_ita_no_space = toId(trad_ita).split(',');
 		trad_ita = trad_ita.split(',');
 		var trad_eng = fs.readFileSync('trad_eng').toString();
-		var trad_eng_no_space = trad_eng.replace(/[^a-zA-Z0-9,]/g,"").split(',');
+		var trad_eng_no_space = toId(trad_eng).split(',');
 		trad_eng = trad_eng.split(',');
 		
 		if (parola == 'metronome') text += 'Move: metronomo; item: plessimetro';
@@ -1156,7 +1162,7 @@ exports.commands = {
 		} catch (e) {
 			return this.say(con, room, 'Si è verificato un errore: riprova fra qualche secondo.');
 		}
-		arg = arg.toLowerCase().replace(/[^a-zA-Z0-9,<>]/g,"").split(',');
+		arg = toId(arg).split(',');
 		var j = 0;
 		var k = 0;
 		var checkTier = false;
@@ -1287,12 +1293,12 @@ exports.commands = {
 			return this.say(con, room, 'Si è verificato un errore: riprova fra qualche secondo.');
 		}
 		
-		arg = arg.toLowerCase().replace(/[^a-zA-Z0-9,<>+-]/g,"").split(',');
+		arg = toId(arg).split(',');
 		if (!arg[1]) return this.say(con, room, 'Scrivi il Pokémon e la stat da calcolare (ad esempio .stat pikachu, speed)');
 		arg[0] = arg[0].replace(/[+-]/g,"");
 		arg[1] = arg[1].replace(/[+-]/g,"");
-		if (aliases[arg[0]]) arg[0] = aliases[arg[0]].toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
-		if (aliases[arg[1]]) arg[1] = aliases[arg[1]].toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		if (aliases[arg[0]]) arg[0] = toId(aliases[arg[0]]);
+		if (aliases[arg[1]]) arg[1] = toId(aliases[arg[1]]);
 		
 		if (pokedex[arg[1]]) {
 			var pokemonarg = 1;
@@ -1411,8 +1417,8 @@ exports.commands = {
 		} catch (e) {
 			return this.say(con, room, 'Si è verificato un errore: riprova fra qualche secondo.');
 		}
-		var pokemon = arg.toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
-		if (aliases[pokemon]) pokemon = aliases[pokemon].toLowerCase().replace(/[^a-zA-Z0-9]/g,"");
+		var pokemon = toId(arg);
+		if (aliases[pokemon]) pokemon = toId(aliases[pokemon]);
 		if (!pokedex[pokemon]) return this.say(con, room, 'Pokémon non trovato');
 		var levelScale = {
 			LC: 94,
