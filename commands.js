@@ -1063,6 +1063,7 @@ exports.commands = {
 		}
 		try {
 			var movedex = require('./moves.js').BattleMovedex;
+			var aliases = require('./aliases.js').BattleAliases;
 		} catch (e) {
 			return this.say(con, room, 'Si è verificato un errore: riprova fra qualche secondo.');
 		}
