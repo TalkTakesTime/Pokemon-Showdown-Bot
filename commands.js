@@ -1,4 +1,4 @@
-﻿/**
+/**
  * This is the file where the bot commands are located
  *
  * @license MIT license
@@ -502,7 +502,42 @@ exports.commands = {
 		}
 		this.say(con, room, text);
 	},
-
+		modchatoff:  function(arg, by, room, con){
+	if(!this.canUse('hourmute', room, by) || room.charAt(0) === ','){
+			var text = '';
+		} else {
+			var text = '/modchat ' + by;
+		}
+		text += '/modchat '+ '+';
+		this.say(con, room,'/modchat ' + 'off');
+	},
+	modchatac: function(arg, by, room, con){
+	if(!this.canUse('hourmute', room, by) || room.charAt(0) === ','){
+			var text = '';
+		} else {
+			var text = '/modchat ' + by;
+		}
+		text += '/modchat '+ '+';
+		this.say(con, room,'/modchat ' + 'autoconfirmed');
+	},
+	modchatv: function(arg, by, room, con){
+	if(!this.canUse('hourmute', room, by) || room.charAt(0) === ','){
+			var text = '';
+		} else {
+			var text = '/modchat ' + by;
+		}
+		text += '/modchat '+ '+';
+		this.say(con, room,'/modchat ' + '+');
+	},
+	modchat:function(arg, by, room, con){
+	if(!this.canUse('hourmute', room, by) || room.charAt(0) === ','){
+			var text = '';
+		} else {
+			var text = 'err';
+		}
+		text += '/modchat ' + 'no rank specified.';
+		this.say(con, room,'Sorry, that is not a valid rank. Full list of moderation is: modchatv, modchatac, modchatoff');
+	},
 	/**
 	 * Room specific commands
 	 *
