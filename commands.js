@@ -509,14 +509,14 @@ exports.commands = {
 		}
 	},
 	deluser: function(arg, by, room, con){
-	if(this.hasRank(by, '#~') || room.charAt(0) === ',') {
-		for(i=0;i<config.excepts.length;i++){
-			if(config.excepts[i] == arg.toLowerCase()){
-				delete(config.excepts[i]);
-				this.say(con, room, arg+' was successfully removed from the whitelist.')
+		if(this.hasRank(by, '#~') || room.charAt(0) === ',') {
+			for(i=0;i<config.excepts.length;i++){
+				if(config.excepts[i] == arg.toLowerCase()){
+					delete(config.excepts[i]);
+					this.say(con, room, arg+' was successfully removed from the whitelist.')
+				}
 			}
 		}
-	}
 	},
 
 	/**
