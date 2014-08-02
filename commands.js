@@ -503,13 +503,13 @@ exports.commands = {
 		this.say(con, room, text);
 	},
 	adduser: function(arg, by, room, con){
-		if(this.hasRank(by, '#~') || room.charAt(0) === ',') {
+		if(this.hasRank(by, '#~')) {
 			config.excepts.push(arg.toLowerCase());
 			this.say(con, room, '/pm '+by+','+arg+' can now use the bot.')
 		}
 	},
 	deluser: function(arg, by, room, con){
-		if(this.hasRank(by, '#~') || room.charAt(0) === ',') {
+		if(this.hasRank(by, '#~')) {
 			for(i=0;i<config.excepts.length;i++){
 				if(config.excepts[i] == arg.toLowerCase()){
 					delete(config.excepts[i]);
