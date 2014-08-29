@@ -157,14 +157,14 @@ exports.parse = {
 					if (room === 'lobby' && config.serverid === 'showdown') {
 						continue;
 					}
-					cmds.push('|/join ' + communitymentoring);
+					cmds.push('|/join ' + room);
 				}
 				for (var i in config.privaterooms) {
 					var room = toId(config.privaterooms[i]);
 					if (room === 'lobby' && config.serverid === 'showdown') {
 						continue;
 					}
-					cmds.push('|/join ' + communitymentoring);
+					cmds.push('|/join ' + room);
 				}
 
 				var self = this;
