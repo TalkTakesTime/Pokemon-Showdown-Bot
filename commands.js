@@ -61,7 +61,7 @@ exports.commands = {
 			}
 			else if (toId(arg) === 'parser') {
 				this.uncacheTree('./parser.js');
-				parser = require('./parser.js');
+				Parse = require('./parser.js').parse; 
 				this.say(con, room, 'Parser reloaded.');
 			}
 		} catch (e) {
