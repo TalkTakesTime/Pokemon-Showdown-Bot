@@ -49,9 +49,21 @@ exports.commands = {
 	reload: function(arg, by, room, con) {
 		if (!this.hasRank(by, '#~')) return false;
 		try {
-			this.uncacheTree('./commands.js');
-			Commands = require('./commands.js').commands;
-			this.say(con, room, 'Commands reloaded.');
+			if (!arg || toId(arg) === 'commands') {
+				this.uncacheTree('./commands.js');
+				Commands = require('./commands.js').commands;
+				this.say(con, room, 'Commands reloaded.');
+			}
+			else if (toId(arg) === 'config') {
+				this.uncacheTree('./config.js');
+				config = require('./config.js');
+				this.say(con, room, 'Config reloaded.');
+			}
+			else if (toId(arg) === 'parser') {
+				this.uncacheTree('./parser.js');
+				parser = require('./parser.js');
+				this.say(con, room, 'Parser reloaded.');
+			}
 		} catch (e) {
 			error('failed to reload: ' + sys.inspect(e));
 		}
