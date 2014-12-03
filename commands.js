@@ -153,7 +153,7 @@ exports.commands = {
 				return;
 			}
 		} else {
-			if (!Commands[cmd]) return this.say(con, room, config.commandcharacter + '' + opts[0] + ' is not a valid command.');
+			if (!Commands[cmd]) return this.say(con, room, config.commandcharacter + opts[0] + ' is not a valid command.');
 			var failsafe = 0;
 			while (!(cmd in settable)) {
 				if (typeof Commands[cmd] === 'string') {
@@ -162,7 +162,7 @@ exports.commands = {
 					if (cmd in settable) {
 						break;
 					} else {
-						this.say(con, room, 'The settings for ' + config.commandcharacter + '' + opts[0] + ' cannot be changed.');
+						this.say(con, room, 'The settings for ' + config.commandcharacter + opts[0] + ' cannot be changed.');
 						return;
 					}
 				} else {
@@ -171,7 +171,7 @@ exports.commands = {
 				}
 				failsafe++;
 				if (failsafe > 5) {
-					this.say(con, room, 'The command "' + config.commandcharacter + '' + opts[0] + '" could not be found.');
+					this.say(con, room, 'The command "' + config.commandcharacter + opts[0] + '" could not be found.');
 					return;
 				}
 			}
@@ -193,11 +193,11 @@ exports.commands = {
 				if (!this.settings[cmd] || (!this.settings[cmd][room] && this.settings[cmd][room] !== false)) {
 					msg = '.' + cmd + ' is available for users of rank ' + ((cmd === 'autoban' || cmd === 'banword') ? '#' : config.defaultrank) + ' and above.';
 				} else if (this.settings[cmd][room] in settingsLevels) {
-					msg = '.' + cmd + ' is available for users of rank ' + this.settings[cmd][room] + ' and above.';
+					msg = config.commandcharacter + cmd + ' is available for users of rank ' + this.settings[cmd][room] + ' and above.';
 				} else if (this.settings[cmd][room] === true) {
-					msg = '.' + cmd + ' is available for all users in this room.';
+					msg = config.commandcharacter + cmd + ' is available for all users in this room.';
 				} else if (this.settings[cmd][room] === false) {
-					msg = '' + config.commandcharacter+''+ cmd + ' is not available for use in this room.';
+					msg = config.commandcharacter + cmd + ' is not available for use in this room.';
 				}
 				this.say(con, room, msg);
 				return;
@@ -208,7 +208,7 @@ exports.commands = {
 				if (!this.settings[cmd]) this.settings[cmd] = {};
 				this.settings[cmd][room] = settingsLevels[newRank];
 				this.writeSettings();
-				this.say(con, room, 'The command ' + config.commandcharacter + '' + cmd + ' is now ' +
+				this.say(con, room, 'The command ' + config.commandcharacter + cmd + ' is now ' +
 					(settingsLevels[newRank] === newRank ? ' available for users of rank ' + newRank + ' and above.' :
 					(this.settings[cmd][room] ? 'available for all users in this room.' : 'unavailable for use in this room.')))
 			}
