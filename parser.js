@@ -183,8 +183,7 @@ exports.parse = {
 					send(connection, cmds);
 				}
 
-				this.chatDataTimer = setInterval(
-					function() {self.chatData = cleanChatData(self.chatData);},
+				this.chatDataTimer = setInterval(self.cleanChatData,
 					30*60*1000
 				);
 				if (lastMessage) this.room = '';
@@ -430,6 +429,25 @@ exports.parse = {
 				if (chatData.points >= 2) this.chatData[user].zeroTol++; // getting muted or higher increases your zero tolerance level (warns do not)
 				chatData.lastAction = time;
 				this.say(connection, room, '/' + cmd + ' ' + user + muteMessage);
+			}
+		}
+	},
+	cleanChatData: function () {
+		var chatData = this.chatData;
+		for (var user in chatData) {
+			for (var room in chatData[user]) {
+				var user = chatData[user][room];
+				if (!user || !user.times || !user.times.length) {
+					delete chatData[user][room];
+					continue;
+				}
+				var newTimes = [];
+				var now = Date.now();
+				for (var i in user.times) {
+					if (now - chatData.times[i] < 5 * 1000) newTimes.push(chatData.times[i]);
+				}
+				chatData.times = newTimes;
+				if (chatData.points > 0 && chatData.points < 4) chatData.points--;
 			}
 		}
 	},
