@@ -54,7 +54,8 @@ global.toId = function(text) {
 };
 
 global.stripCommands = function(text) {
-	return ((text.trim().charAt(0) === '/') ? '/' : ((text.trim().charAt(0) === '!') ? ' ':'')) + text.trim();
+	if (text.charAt(0) === '/' || text.charAt(0) === '!' || text.substr(0,2) === '>>') return ' ' + text.trim();
+	return text;
 };
 
 global.send = function(connection, data) {
