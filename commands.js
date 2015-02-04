@@ -40,6 +40,15 @@ exports.commands = {
 			text += 'There is no guide for this bot. PM the owner with any questions.';
 		}
 		this.say(con, room, text);
+	}, 
+	source: function(arg, by, room, con) {
+		if (this.hasRank(by, '#~') || room.charAt(0) === ',') {
+			var text = '';
+		} else {
+			var text = '/pm ' + by + ', ';
+		}
+		text += '**Pokemon Showdown Bot Source**: https://github.com/TalkTakesTime/Pokemon-Showdown-Bot';
+		this.say(con, room, text);
 	},
 
 	/**
