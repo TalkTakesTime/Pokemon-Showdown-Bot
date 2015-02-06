@@ -41,7 +41,7 @@ exports.commands = {
 		}
 		this.say(con, room, text);
 	}, 
-	source: function(arg, by, room, con) {
+	git: function(arg, by, room, con) {
 		if (this.hasRank(by, '#~') || room.charAt(0) === ',') {
 			var text = '';
 		} else {
