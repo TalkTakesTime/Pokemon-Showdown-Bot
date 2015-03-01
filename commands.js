@@ -52,7 +52,6 @@ exports.commands = {
 	 * or to help with upkeep of the bot.
 	 */
 
-	refresh: 'reload',
 	reload: function(arg, by, room, con) {
 		if (!this.hasRank(by, '#~')) return false;
 		try {
@@ -346,7 +345,6 @@ exports.commands = {
 	bannedwords: 'viewbannedwords',
 	bw: 'viewbannedwords',
 	viewbannedphrases: 'viewbannedwords',
-	vbw: 'viewbannedwords',
 	viewbannedwords: function(arg, by, room, con) {
 		if (!this.canUse('banword', room, by)) return false;
 		arg = arg.trim().toLowerCase();
@@ -474,7 +472,6 @@ exports.commands = {
 			case 18: text += "My reply is no."; break;
 			case 19: text += "Outlook good."; break;
 			case 20: text += "Don't count on it."; break;
-			case 21: text += "No."; break;
 		}
 		this.say(con, room, text);
 	},
