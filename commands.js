@@ -565,8 +565,6 @@ exports.commands = {
 		case 'league':
 			return this.say(con, room, text + 'Wi-Fi Room Pokemon League: http://tinyurl.com/wifiroomleague');
 		case 'checkfc':
-		case 'friendcode':
-		case 'fc':
 			if (!config.googleapikey) return this.say(con, room, text + 'A Google API key has not been provided and is required for this command to work.');
 			if (arg.length < 2) return this.say(con, room, text + 'Usage: .wifi checkfc, [fc]');
 			this.wifiRoom = this.wifiroom || {docRevs: ['', ''], scammers : {}, cloners: []};
