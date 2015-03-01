@@ -52,6 +52,7 @@ exports.commands = {
 	 * or to help with upkeep of the bot.
 	 */
 
+	refresh: 'reload',
 	reload: function(arg, by, room, con) {
 		if (!this.hasRank(by, '#~')) return false;
 		try {
@@ -341,6 +342,9 @@ exports.commands = {
 		this.writeSettings();
 		this.say(con, room, "Phrase \"" + arg + "\" is no longer banned.");
 	},
+	bannedphrases: 'viewbannedwords',
+	bannedwords: 'viewbannedwords',
+	bw: 'viewbannedwords',
 	viewbannedphrases: 'viewbannedwords',
 	vbw: 'viewbannedwords',
 	viewbannedwords: function(arg, by, room, con) {
@@ -470,6 +474,7 @@ exports.commands = {
 			case 18: text += "My reply is no."; break;
 			case 19: text += "Outlook good."; break;
 			case 20: text += "Don't count on it."; break;
+			case 21: text += "No."; break;
 		}
 		this.say(con, room, text);
 	},
@@ -563,6 +568,8 @@ exports.commands = {
 		case 'league':
 			return this.say(con, room, text + 'Wi-Fi Room Pokemon League: http://tinyurl.com/wifiroomleague');
 		case 'checkfc':
+		case 'friendcode':
+		case 'fc':
 			if (!config.googleapikey) return this.say(con, room, text + 'A Google API key has not been provided and is required for this command to work.');
 			if (arg.length < 2) return this.say(con, room, text + 'Usage: .wifi checkfc, [fc]');
 			this.wifiRoom = this.wifiroom || {docRevs: ['', ''], scammers : {}, cloners: []};
@@ -719,6 +726,8 @@ exports.commands = {
 		this.say(con, room, text + 'Game List: 1. Would You Rather, 2. NickGames, 3. Scattegories, 4. Commonyms, 5. Questionnaires, 6. Funarios, 7. Anagrams, 8. Spot the Reference, 9. Pokemath, 10. Liar\'s Dice');
 		this.say(con, room, text + '11. Pun Game, 12. Dice Cup, 13. Who\'s That Pokemon?, 14. Pokemon V Pokemon (BST GAME), 15. Letter Getter, 16. Missing Link, 17. Parameters! More information can be found here: http://psgamecorner.weebly.com/games.html');
 	},
+	thp: 'happy',
+	happyplace: 'happy',
 	happy: function(arg, by, room, con) {
 		// info for The Happy Place
 		if (config.serverid !== 'showdown') return false;
