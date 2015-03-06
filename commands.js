@@ -341,10 +341,7 @@ exports.commands = {
 		this.writeSettings();
 		this.say(con, room, "Phrase \"" + arg + "\" is no longer banned.");
 	},
-	bannedphrases: 'viewbannedwords',
-	bannedwords: 'viewbannedwords',
-	bw: 'viewbannedwords',
-	viewbannedphrases: 'viewbannedwords',
+	vbw: 'viewbannedwords',
 	viewbannedwords: function(arg, by, room, con) {
 		if (!this.canUse('banword', room, by)) return false;
 		arg = arg.trim().toLowerCase();
