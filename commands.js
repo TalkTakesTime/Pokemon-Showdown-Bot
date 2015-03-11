@@ -481,30 +481,12 @@ exports.commands = {
 			var text = '/pm ' + by + ', ';
 		}
 
-		var rand = ~~(20 * Math.random()) + 1;
-
-		switch (rand) {
-	 		case 1: text += "Signs point to yes."; break;
-	  		case 2: text += "Yes."; break;
-			case 3: text += "Reply hazy, try again."; break;
-			case 4: text += "Without a doubt."; break;
-			case 5: text += "My sources say no."; break;
-			case 6: text += "As I see it, yes."; break;
-			case 7: text += "You may rely on it."; break;
-			case 8: text += "Concentrate and ask again."; break;
-			case 9: text += "Outlook not so good."; break;
-			case 10: text += "It is decidedly so."; break;
-			case 11: text += "Better not tell you now."; break;
-			case 12: text += "Very doubtful."; break;
-			case 13: text += "Yes - definitely."; break;
-			case 14: text += "It is certain."; break;
-			case 15: text += "Cannot predict now."; break;
-			case 16: text += "Most likely."; break;
-			case 17: text += "Ask again later."; break;
-			case 18: text += "My reply is no."; break;
-			case 19: text += "Outlook good."; break;
-			case 20: text += "Don't count on it."; break;
-		}
+		text += ["Signs point to yes.", "Yes.", "Reply hazy, try again.", "Without a doubt.",
+			"My sources say no.", "As I see it, yes.", "You may rely on it.", "Concentrate and ask again.",
+			"Outlook not so good.", "It is decidedly so.", "Better not tell you now.", "Very doubtful.",
+			"Yes - definitely.", "It is certain.", "Cannot predict now.", "Most likely.", "Ask again later.",
+			"My reply is no.", "Outlook good.", "Don't count on it."
+		][~~(20 * Math.random())];
 		this.say(con, room, text);
 	},
 
