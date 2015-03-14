@@ -378,7 +378,6 @@ exports.commands = {
 		this.writeSettings();
 		this.say(con, room, "Phrase \"" + arg + "\" is no longer banned.");
 	},
-	viewbannedphrases: 'viewbannedwords',
 	vbw: 'viewbannedwords',
 	viewbannedwords: function(arg, by, room, con) {
 		if (!this.canUse('banword', room, by)) return false;
@@ -762,6 +761,8 @@ exports.commands = {
 		this.say(con, room, text + 'Game List: 1. Would You Rather, 2. NickGames, 3. Scattegories, 4. Commonyms, 5. Questionnaires, 6. Funarios, 7. Anagrams, 8. Spot the Reference, 9. Pokemath, 10. Liar\'s Dice');
 		this.say(con, room, text + '11. Pun Game, 12. Dice Cup, 13. Who\'s That Pokemon?, 14. Pokemon V Pokemon (BST GAME), 15. Letter Getter, 16. Missing Link, 17. Parameters! More information can be found here: http://psgamecorner.weebly.com/games.html');
 	},
+	thp: 'happy',
+	happyplace: 'happy',
 	happy: function(arg, by, room, con) {
 		// info for The Happy Place
 		if (config.serverid !== 'showdown') return false;
