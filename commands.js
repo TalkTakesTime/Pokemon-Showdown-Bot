@@ -177,6 +177,7 @@ exports.commands = {
 			var settingsLevels = {
 				off: false,
 				disable: false,
+				'false': false,
 				'+': '+',
 				'%': '%',
 				'@': '@',
@@ -184,7 +185,8 @@ exports.commands = {
 				'#': '#',
 				'~': '~',
 				on: true,
-				enable: true
+				enable: true,
+				'true': true
 			};
 			if (!opts[1] || !opts[1].trim()) {
 				var msg = '';
