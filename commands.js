@@ -722,7 +722,7 @@ exports.commands = {
 			return false;
 		}
 		var messages = {
-			cc: 'The monotype room\'s latest core challeng __psychic__ and __fairy__ can be found here: http://monotypeps.weebly.com/challenge-12.html',
+			cc: 'The monotype room\'s latest core challenge __psychic__ and __fairy__ can be found here: http://monotypeps.weebly.com/challenge-12.html',
 			plug: 'The monotype room\'s plug can be found here: https://plug.dj/monotyke-djs',
 			rules: 'The monotype room\'s rules can be found here: http://monotypeps.weebly.com/monotype-room.html',
 			site: 'The monotype room\'s site can be found here: http://monotypeps.weebly.com/',
