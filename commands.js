@@ -722,13 +722,13 @@ exports.commands = {
 			return false;
 		}
 		var messages = {
-			forums: 'The monotype room\'s forums can be found here: http://psmonotypeforum.createaforum.com/index.php',
-			plug: 'The monotype room\'s plug can be found here: http://plug.dj/monotype-3-am-club/',
-			rules: 'The monotype room\'s rules can be found here: http://psmonotype.wix.com/psmono#!rules/cnnz',
-			site: 'The monotype room\'s site can be found here: http://www.psmonotype.wix.com/psmono',
-			league: 'Information on the Monotype League can be found here: http://themonotypeleague.weebly.com/'
+			cc: 'The monotype room\'s latest core challeng __psychic__ and __fairy__ can be found here: http://monotypeps.weebly.com/challenge-12.html',
+			plug: 'The monotype room\'s plug can be found here: https://plug.dj/monotyke-djs',
+			rules: 'The monotype room\'s rules can be found here: http://monotypeps.weebly.com/monotype-room.html',
+			site: 'The monotype room\'s site can be found here: http://monotypeps.weebly.com/',
+			stats: by + ', You can find the monotype usage stats here: http://monotypeps.weebly.com/stats.html'
 		};
-		text += messages[toId(arg)] || 'Unknown option. General information can be found here: http://www.psmonotype.wix.com/psmono';
+		text += messages[toId(arg)] || 'Unknown option. Ask monotype room staff for help if you are looking for something, General information can be found here: http://monotypeps.weebly.com/';
 		this.say(room, text);
 	},
 	survivor: function(arg, by, room) {
