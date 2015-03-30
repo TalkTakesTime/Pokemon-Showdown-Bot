@@ -728,7 +728,7 @@ exports.commands = {
 			site: 'The monotype room\'s site can be found here: http://monotypeps.weebly.com/',
 			stats: 'You can find the monotype usage stats here: http://monotypeps.weebly.com/stats.html'
 		};
-		text += messages[toId(arg)] || 'Unknown option. Ask monotype room staff for help if you are looking for something, General information can be found here: http://monotypeps.weebly.com/';
+		text += messages[toId(arg)] || 'Unknown option. If you are looking for something and unable to find it, please ask monotype room staff for help on where to locate what you are looking for. General information can be found here: http://monotypeps.weebly.com/';
 		this.say(room, text);
 	},
 	survivor: function(arg, by, room) {
