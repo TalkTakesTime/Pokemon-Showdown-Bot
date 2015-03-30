@@ -726,7 +726,7 @@ exports.commands = {
 			plug: 'The monotype room\'s plug can be found here: https://plug.dj/monotyke-djs',
 			rules: 'The monotype room\'s rules can be found here: http://monotypeps.weebly.com/monotype-room.html',
 			site: 'The monotype room\'s site can be found here: http://monotypeps.weebly.com/',
-			stats: by + ', You can find the monotype usage stats here: http://monotypeps.weebly.com/stats.html'
+			stats: 'You can find the monotype usage stats here: http://monotypeps.weebly.com/stats.html'
 		};
 		text += messages[toId(arg)] || 'Unknown option. Ask monotype room staff for help if you are looking for something, General information can be found here: http://monotypeps.weebly.com/';
 		this.say(room, text);
