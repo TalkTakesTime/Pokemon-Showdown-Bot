@@ -177,6 +177,7 @@ exports.commands = {
 			var settingsLevels = {
 				off: false,
 				disable: false,
+				'false': false,
 				'+': '+',
 				'%': '%',
 				'@': '@',
@@ -184,7 +185,8 @@ exports.commands = {
 				'#': '#',
 				'~': '~',
 				on: true,
-				enable: true
+				enable: true,
+				'true': true
 			};
 			if (!opts[1] || !opts[1].trim()) {
 				var msg = '';
@@ -202,13 +204,13 @@ exports.commands = {
 			} else {
 				if (!this.hasRank(by, '#~')) return false;
 				var newRank = opts[1].trim();
-				if (!(newRank in settingsLevels)) return this.say(room, 'Unknown option: "' + newRank + '". Valid settings are: off/disable, +, %, @, &, #, ~, on/enable.');
+				if (!(newRank in settingsLevels)) return this.say(room, 'Unknown option: "' + newRank + '". Valid settings are: off/disable/false, +, %, @, &, #, ~, on/enable/true.');
 				if (!this.settings[cmd]) this.settings[cmd] = {};
 				this.settings[cmd][room] = settingsLevels[newRank];
 				this.writeSettings();
 				this.say(room, 'The command ' + config.commandcharacter + '' + cmd + ' is now ' +
 					(settingsLevels[newRank] === newRank ? ' available for users of rank ' + newRank + ' and above.' :
-					(this.settings[cmd][room] ? 'available for all users in this room.' : 'unavailable for use in this room.')))
+					(this.settings[cmd][room] ? 'available for all users in this room.' : 'unavailable for use in this room.')));
 			}
 		}
 	},
