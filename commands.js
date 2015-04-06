@@ -112,6 +112,7 @@ exports.commands = {
 			wifi: 1,
 			monotype: 1,
 			autoban: 1,
+			uptime: 1,
 			happy: 1,
 			guia: 1,
 			studio: 1,
@@ -213,6 +214,24 @@ exports.commands = {
 					(this.settings[cmd][room] ? 'available for all users in this room.' : 'unavailable for use in this room.')))
 			}
 		}
+	},
+	botuptime: 'uptime',
+	uptime: function(arg, by, room, con) {
+		if (!this.canUse('uptime', room, by) || room.charAt(0) === ',') return false;
+
+                var uptime = Math.round(process.uptime());
+
+		if (uptime > 24*60*60) {                                
+			var uptimeText = "";                                
+			var uptimeDays = Math.floor(uptime/(24*60*60));                                
+			uptimeText = uptimeDays + " " + (uptimeDays == 1 ? "day" : "days");                               
+			var uptimeHours = Math.floor(uptime/(60*60)) - uptimeDays*24;                                
+			if (uptimeHours) uptimeText += ", " + uptimeHours + " " + (uptimeHours == 1 ? "hour" : "hours");
+			return uptimeText;                        
+		} else {                               
+			uptime = uptime.seconds().duration();                      
+		}    
+		this.say(con,room, "My current uptime is: "+uptime+".");
 	},
 	blacklist: 'autoban',
 	ban: 'autoban',
