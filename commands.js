@@ -185,7 +185,7 @@ exports.commands = {
 				return;
 			}
 		} else {
-			if (!Commands[cmd]) return this.say(room, config.commandcharacter + '' + opts[0] + ' is not a valid command.');
+			if (!Commands[cmd]) return this.say(room, config.commandcharacter + opts[0] + ' is not a valid command.');
 			var failsafe = 0;
 			while (!(cmd in settable)) {
 				if (typeof Commands[cmd] === 'string') {
@@ -194,7 +194,7 @@ exports.commands = {
 					if (cmd in settable) {
 						break;
 					} else {
-						this.say(room, 'The settings for ' + config.commandcharacter + '' + opts[0] + ' cannot be changed.');
+						this.say(room, 'The settings for ' + config.commandcharacter + opts[0] + ' cannot be changed.');
 						return;
 					}
 				} else {
@@ -203,7 +203,7 @@ exports.commands = {
 				}
 				failsafe++;
 				if (failsafe > 5) {
-					this.say(room, 'The command "' + config.commandcharacter + '' + opts[0] + '" could not be found.');
+					this.say(room, 'The command "' + config.commandcharacter + opts[0] + '" could not be found.');
 					return;
 				}
 			}
@@ -242,7 +242,7 @@ exports.commands = {
 				if (!this.settings[cmd]) this.settings[cmd] = {};
 				this.settings[cmd][room] = settingsLevels[newRank];
 				this.writeSettings();
-				this.say(room, 'The command ' + config.commandcharacter + '' + cmd + ' is now ' +
+				this.say(room, 'The command ' + config.commandcharacter + cmd + ' is now ' +
 					(settingsLevels[newRank] === newRank ? ' available for users of rank ' + newRank + ' and above.' :
 					(this.settings[cmd][room] ? 'available for all users in this room.' : 'unavailable for use in this room.')))
 			}
