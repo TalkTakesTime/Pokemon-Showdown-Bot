@@ -21,7 +21,7 @@ exports.commands = {
 
 	credits: 'about',
 	about: function (arg, by, room) {
-		var text = this.hasRank(by, '#&~') || room.charAt(0) === ',' ? '' : '/pm ' + by + ', ';
+		var text = this.hasRank(by, '&#~') || room.charAt(0) === ',' ? '' : '/pm ' + by + ', ';
 		text += '**Pokémon Showdown Bot** by: Quinella, TalkTakesTime, and Morfent';
 		this.say(room, text);
 	},
@@ -32,7 +32,7 @@ exports.commands = {
 	},
 	help: 'guide',
 	guide: function (arg, by, room) {
-		var text = this.hasRank(by, '#&~') || room.charAt(0) === ',' ? '' : '/pm ' + by + ', ';
+		var text = this.hasRank(by, '&#~') || room.charAt(0) === ',' ? '' : '/pm ' + by + ', ';
 		if (config.botguide) {
 			text += 'A guide on how to use this bot can be found here: ' + config.botguide;
 		} else {
@@ -78,7 +78,7 @@ exports.commands = {
 			var result = eval(arg.trim());
 			this.say(room, JSON.stringify(result));
 		} catch (e) {
-			this.say(room, e.name + ": " + e.message);
+			this.say(room, e.name + ': ' + e.message);
 		}
 	},
 	uptime: function (arg, by, room) {
@@ -124,7 +124,7 @@ exports.commands = {
 
 	settings: 'set',
 	set: function (arg, by, room) {
-		if (!this.hasRank(by, '%@&#&~') || room.charAt(0) === ',') return false;
+		if (!this.hasRank(by, '%@&#~') || room.charAt(0) === ',') return false;
 
 		var settable = {
 			say: 1,
@@ -133,14 +133,12 @@ exports.commands = {
 			buzz: 1,
 			'8ball': 1,
 			survivor: 1,
-			games: 1,
 			wifi: 1,
 			monotype: 1,
 			autoban: 1,
 			happy: 1,
 			guia: 1,
 			studio: 1,
-			'switch': 1,
 			banword: 1
 		};
 		var modOpts = {
@@ -227,7 +225,7 @@ exports.commands = {
 				this.say(room, msg);
 				return;
 			} else {
-				if (!this.hasRank(by, '#&~')) return false;
+				if (!this.hasRank(by, '&#~')) return false;
 				var newRank = opts[1].trim();
 				if (!(newRank in settingsLevels)) return this.say(room, 'Unknown option: "' + newRank + '". Valid settings are: off/disable/false, +, %, @, &, #, ~, on/enable/true.');
 				if (!this.settings[cmd]) this.settings[cmd] = {};
@@ -244,7 +242,7 @@ exports.commands = {
 	ab: 'autoban',
 	autoban: function (arg, by, room) {
 		if (!this.canUse('autoban', room, by) || room.charAt(0) === ',') return false;
-		if (!this.hasRank(this.ranks[room] || ' ', '@&#&~')) return this.say(room, config.nick + ' requires rank of @ or higher to (un)blacklist.');
+		if (!this.hasRank(this.ranks[room] || ' ', '@&#~')) return this.say(room, config.nick + ' requires rank of @ or higher to (un)blacklist.');
 
 		arg = arg.split(',');
 		var added = [];
@@ -280,7 +278,7 @@ exports.commands = {
 	unab: 'unautoban',
 	unautoban: function (arg, by, room) {
 		if (!this.canUse('autoban', room, by) || room.charAt(0) === ',') return false;
-		if (!this.hasRank(this.ranks[room] || ' ', '@&#&~')) return this.say(room, config.nick + ' requires rank of @ or higher to (un)blacklist.');
+		if (!this.hasRank(this.ranks[room] || ' ', '@&#~')) return this.say(room, config.nick + ' requires rank of @ or higher to (un)blacklist.');
 
 		arg = arg.split(',');
 		var removed = [];
@@ -311,7 +309,7 @@ exports.commands = {
 	rab: 'regexautoban',
 	regexautoban: function (arg, by, room) {
 		if (config.regexautobanwhitelist.indexOf(toId(by)) < 0 || !this.canUse('autoban', room, by) || room.charAt(0) === ',') return false;
-		if (!this.hasRank(this.ranks[room] || ' ', '@&#&~')) return this.say(room, config.nick + ' requires rank of @ or higher to (un)blacklist.');
+		if (!this.hasRank(this.ranks[room] || ' ', '@&#~')) return this.say(room, config.nick + ' requires rank of @ or higher to (un)blacklist.');
 		if (!arg) return this.say(room, 'You must specify a regular expression to (un)blacklist.');
 
 		try {
@@ -329,7 +327,7 @@ exports.commands = {
 	unrab: 'unregexautoban',
 	unregexautoban: function (arg, by, room) {
 		if (config.regexautobanwhitelist.indexOf(toId(by)) < 0 || !this.canUse('autoban', room, by) || room.charAt(0) === ',') return false;
-		if (!this.hasRank(this.ranks[room] || ' ', '@&#&~')) return this.say(room, config.nick + ' requires rank of @ or higher to (un)blacklist.');
+		if (!this.hasRank(this.ranks[room] || ' ', '@&#~')) return this.say(room, config.nick + ' requires rank of @ or higher to (un)blacklist.');
 		if (!arg) return this.say(room, 'You must specify a regular expression to (un)blacklist.');
 
 		arg = '/' + arg.replace(/\\\\/g, '\\') + '/i';
@@ -359,7 +357,7 @@ exports.commands = {
 				var nickList = Object.keys(this.settings.blacklist[room]);
 				if (!nickList.length) return this.say(room, '/pm ' + by + ', No users are blacklisted in this room.');
 				this.uploadToHastebin('The following users are banned in ' + room + ':\n\n' + nickList.join('\n'), function (link) {
-					this.say(room, "/pm " + by + ", Blacklist for room " + room + ": " + link);
+					this.say(room, '/pm ' + by + ', Blacklist for room ' + room + ': ' + link);
 				}.bind(this));
 				return;
 			}
@@ -380,10 +378,10 @@ exports.commands = {
 		}
 
 		if (!this.settings.bannedphrases[tarRoom]) this.settings.bannedphrases[tarRoom] = {};
-		if (arg in this.settings.bannedphrases[tarRoom]) return this.say(room, "Phrase \"" + arg + "\" is already banned.");
+		if (arg in this.settings.bannedphrases[tarRoom]) return this.say(room, 'Phrase "' + arg + '" is already banned.');
 		this.settings.bannedphrases[tarRoom][arg] = 1;
 		this.writeSettings();
-		this.say(room, "Phrase \"" + arg + "\" is now banned.");
+		this.say(room, 'Phrase "' + arg + '" is now banned.');
 	},
 	unbanphrase: 'unbanword',
 	unbanword: function (arg, by, room) {
@@ -398,12 +396,12 @@ exports.commands = {
 		}
 
 		if (!this.settings.bannedphrases || !this.settings.bannedphrases[tarRoom] || !(arg in this.settings.bannedphrases[tarRoom])) 
-			return this.say(room, "Phrase \"" + arg + "\" is not currently banned.");
+			return this.say(room, 'Phrase "' + arg + '" is not currently banned.');
 		delete this.settings.bannedphrases[tarRoom][arg];
 		if (!Object.size(this.settings.bannedphrases[tarRoom])) delete this.settings.bannedphrases[tarRoom];
 		if (!Object.size(this.settings.bannedphrases)) delete this.settings.bannedphrases;
 		this.writeSettings();
-		this.say(room, "Phrase \"" + arg + "\" is no longer banned.");
+		this.say(room, 'Phrase "' + arg + '" is no longer banned.');
 	},
 	viewbannedphrases: 'viewbannedwords',
 	vbw: 'viewbannedwords',
@@ -417,18 +415,18 @@ exports.commands = {
 			tarRoom = 'global';
 		}
 
-		var text = "";
+		var text = '';
 		if (!this.settings.bannedphrases || !this.settings.bannedphrases[tarRoom]) {
-			text = "No phrases are banned in this room.";
+			text = 'No phrases are banned in this room.';
 		} else {
 			if (arg.length) {
-				text = "The phrase \"" + arg + "\" is currently " + (arg in this.settings.bannedphrases[tarRoom] ? "" : "not ") + "banned " +
-					(room.charAt(0) === ',' ? "globally" : "in " + room) + ".";
+				text = 'The phrase "' + arg + '" is currently ' + (arg in this.settings.bannedphrases[tarRoom] ? '' : 'not ') + 'banned ' +
+					(room.charAt(0) === ',' ? 'globally' : 'in ' + room) + '.';
 			} else {
 				var banList = Object.keys(this.settings.bannedphrases[tarRoom]);
-				if (!banList.length) return this.say(room, "No phrases are banned in this room.");
-				this.uploadToHastebin("The following phrases are banned " + (room.charAt(0) === ',' ? "globally" : "in " + room) + ":\n\n" + banList.join('\n'), function (link) {
-					this.say(room, (room.charAt(0) === ',' ? "" : "/pm " + by + ", ") + "Banned Phrases " + (room.charAt(0) === ',' ? "globally" : "in " + room) + ": " + link);
+				if (!banList.length) return this.say(room, 'No phrases are banned in this room.');
+				this.uploadToHastebin('The following phrases are banned ' + (room.charAt(0) === ',' ? 'globally' : 'in ' + room) + ':\n\n' + banList.join('\n'), function (link) {
+					this.say(room, (room.charAt(0) === ',' ? '' : '/pm ' + by + ', ') + 'Banned Phrases ' + (room.charAt(0) === ',' ? 'globally' : 'in ' + room) + ': ' + link);
 				}.bind(this));
 				return;
 			}
@@ -496,64 +494,64 @@ exports.commands = {
 
 		switch (rand) {
 	 		case 0:
-				text += "Signs point to yes.";
+				text += 'Signs point to yes.';
 				break;
 	  		case 1:
-				text += "Yes.";
+				text += 'Yes.';
 				break;
 			case 2:
-				text += "Reply hazy, try again.";
+				text += 'Reply hazy, try again.';
 				break;
 			case 3:
-				text += "Without a doubt.";
+				text += 'Without a doubt.';
 				break;
 			case 4:
-				text += "My sources say no.";
+				text += 'My sources say no.';
 				break;
 			case 5:
-				text += "As I see it, yes.";
+				text += 'As I see it, yes.';
 				break;
 			case 6:
-				text += "You may rely on it.";
+				text += 'You may rely on it.';
 				break;
 			case 7:
-				text += "Concentrate and ask again.";
+				text += 'Concentrate and ask again.';
 				break;
 			case 8:
-				text += "Outlook not so good.";
+				text += 'Outlook not so good.';
 				break;
 			case 9:
-				text += "It is decidedly so.";
+				text += 'It is decidedly so.';
 				break;
 			case 10:
-				text += "Better not tell you now.";
+				text += 'Better not tell you now.';
 				break;
 			case 11:
-				text += "Very doubtful.";
+				text += 'Very doubtful.';
 				break;
 			case 12:
-				text += "Yes - definitely.";
+				text += 'Yes - definitely.';
 				break;
 			case 13:
-				text += "It is certain.";
+				text += 'It is certain.';
 				break;
 			case 14:
-				text += "Cannot predict now.";
+				text += 'Cannot predict now.';
 				break;
 			case 15:
-				text += "Most likely.";
+				text += 'Most likely.';
 				break;
 			case 16:
-				text += "Ask again later.";
+				text += 'Ask again later.';
 				break;
 			case 17:
-				text += "My reply is no.";
+				text += 'My reply is no.';
 				break;
 			case 18:
-				text += "Outlook good.";
+				text += 'Outlook good.';
 				break;
 			case 19:
-				text += "Don't count on it.";
+				text += 'Don\'t count on it.';
 				break;
 		}
 
@@ -599,11 +597,6 @@ exports.commands = {
 			plug: '/announce The Studio\'s plug.dj can be found here: https://plug.dj/the-studio/'
 		};
 		this.say(room, text + (messages[toId(arg)] || ('Welcome to The Studio, a music sharing room on PS!. If you have any questions, feel free to PM a room staff member. Available commands for .studio: ' + Object.keys(messages).join(', '))));
-	},
-	'switch': function (arg, by, room) {
-		if (room !== 'gamecorner' || config.serverid !== 'showdown' || !this.canUse('switch', room, by)) return false;
-		this.say(room, 'Taking over the world. Starting with Game Corner. Room deregistered.');
-		this.say(room, '/k ' + (toId(arg) || by) + ', O3O YOU HAVE TOUCHED THE SWITCH');
 	},
 	wifi: function (arg, by, room) {
 		// links to relevant sites for the Wi-Fi room 
@@ -789,26 +782,14 @@ exports.commands = {
 			return false;
 		}
 		var gameTypes = {
-			hg: "The rules for this game type can be found here: http://survivor-ps.weebly.com/hunger-games.html",
-			hungergames: "The rules for this game type can be found here: http://survivor-ps.weebly.com/hunger-games.html",
-			classic: "The rules for this game type can be found here: http://survivor-ps.weebly.com/classic.html"
+			hg: 'The rules for this game type can be found here: http://survivor-ps.weebly.com/hunger-games.html',
+			hungergames: 'The rules for this game type can be found here: http://survivor-ps.weebly.com/hunger-games.html',
+			classic: 'The rules for this game type can be found here: http://survivor-ps.weebly.com/classic.html'
 		};
 		arg = toId(arg);
-		if (!arg) return this.say(room, text + "The list of game types can be found here: http://survivor-ps.weebly.com/themes.html");
-		text += gameTypes[arg] || "Invalid game type. The game types can be found here: http://survivor-ps.weebly.com/themes.html";
+		if (!arg) return this.say(room, text + 'The list of game types can be found here: http://survivor-ps.weebly.com/themes.html');
+		text += gameTypes[arg] || 'Invalid game type. The game types can be found here: http://survivor-ps.weebly.com/themes.html';
 		this.say(room, text);
-	},
-	games: function (arg, by, room) {
-		// lists the games for the games room
-		if (config.serverid !== 'showdown') return false;
-		var text = '';
-		if (room === 'gamecorner') {
-			if (!this.canUse('games', room, by)) text += '/pm ' + by + ', ';
-		} else if (room.charAt(0) !== ',') {
-			return false;
-		}
-		this.say(room, text + 'Game List: 1. Would You Rather, 2. NickGames, 3. Scattegories, 4. Commonyms, 5. Questionnaires, 6. Funarios, 7. Anagrams, 8. Spot the Reference, 9. Pokemath, 10. Liar\'s Dice');
-		this.say(room, text + '11. Pun Game, 12. Dice Cup, 13. Who\'s That Pokemon?, 14. Pokemon V Pokemon (BST GAME), 15. Letter Getter, 16. Missing Link, 17. Parameters! More information can be found here: http://psgamecorner.weebly.com/games.html');
 	},
 	thp: 'happy',
 	thehappyplace: 'happy',
@@ -823,9 +804,9 @@ exports.commands = {
 		}
 		arg = toId(arg);
 		if (arg === 'askstaff' || arg === 'ask' || arg === 'askannie') {
-			text += "http://thepshappyplace.weebly.com/ask-the-staff.html";
+			text += 'http://thepshappyplace.weebly.com/ask-the-staff.html';
 		} else {
-			text += "The Happy Place, at its core, is a friendly environment for anyone just looking for a place to hang out and relax. We also specialize in taking time to give advice on life problems for users. Need a place to feel at home and unwind? Look no further!";
+			text += 'The Happy Place, at its core, is a friendly environment for anyone just looking for a place to hang out and relax. We also specialize in taking time to give advice on life problems for users. Need a place to feel at home and unwind? Look no further!';
 		}
 		this.say(room, text);
 	},
@@ -851,7 +832,7 @@ exports.commands = {
 		}.bind(this), 7 * 1000, room, by + ', your time to answer is up!');
 	},
 	reset: function (arg, by, room) {
-		if (!this.buzzed || !this.hasRank(by, '%@&#&~') || room.charAt(0) === ',') return false;
+		if (!this.buzzed || !this.hasRank(by, '%@&#~') || room.charAt(0) === ',') return false;
 		clearTimeout(this.buzzer);
 		this.buzzed = '';
 		this.say(room, 'The buzzer has been reset.');

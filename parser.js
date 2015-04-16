@@ -183,7 +183,7 @@ exports.parse = {
 				if (this.isBlacklisted(toId(by), room)) return this.say(room, '/roomban ' + by + ', Blacklisted user');
 
 				spl = spl.slice(3).join('|');
-				if ('%@#&~'.indexOf(by.charAt(0)) < 0) this.processChatData(toId(by), room, spl);
+				if ('%@&#~'.indexOf(by.charAt(0)) < 0) this.processChatData(toId(by), room, spl);
 				this.chatMessage(spl, by, room);
 				break;
 			case 'c:':
@@ -191,7 +191,7 @@ exports.parse = {
 				if (this.isBlacklisted(toId(by), room)) return this.say(room, '/roomban ' + by + ', Blacklisted user');
 
 				spl = spl.slice(4).join('|');
-				if ('%@#&~'.indexOf(by.charAt(0)) < 0) this.processChatData(toId(by), room, spl);
+				if ('%@&#~'.indexOf(by.charAt(0)) < 0) this.processChatData(toId(by), room, spl);
 				this.chatMessage(spl, by, room);
 				break;
 			case 'pm':
@@ -234,14 +234,14 @@ exports.parse = {
 
 		if (Commands[cmd]) {
 			var failsafe = 0;
-			while (typeof Commands[cmd] !== "function" && failsafe++ < 10) {
+			while (typeof Commands[cmd] !== 'function' && failsafe++ < 10) {
 				cmd = Commands[cmd];
 			}
-			if (typeof Commands[cmd] === "function") {
+			if (typeof Commands[cmd] === 'function') {
 				cmdr(cmdrMessage);
 				Commands[cmd].call(this, arg, by, room);
 			} else {
-				error("invalid command type for " + cmd + ": " + (typeof Commands[cmd]));
+				error('invalid command type for ' + cmd + ': ' + (typeof Commands[cmd]));
 			}
 		}
 	},
@@ -260,7 +260,7 @@ exports.parse = {
 	},
 	canUse: function (cmd, room, user) {
 		var canUse = false;
-		var ranks = ' +%@&#&~';
+		var ranks = ' +%@#&~';
 		if (!this.settings[cmd] || !this.settings[cmd][room]) {
 			canUse = this.hasRank(user, ranks.substr(ranks.indexOf((cmd === 'autoban' || cmd === 'banword') ? '#' : config.defaultrank)));
 		} else if (this.settings[cmd][room] === true) {
@@ -313,14 +313,14 @@ exports.parse = {
 	},
 	uploadToHastebin: function (toUpload, callback) {
 		var reqOpts = {
-			hostname: "hastebin.com",
-			method: "POST",
+			hostname: 'hastebin.com',
+			method: 'POST',
 			path: '/documents'
 		};
 
 		var req = require('http').request(reqOpts, function (res) {
 			res.on('data', function (chunk) {
-				if (callback && typeof callback === "function") callback("hastebin.com/raw/" + JSON.parse(chunk.toString())['key']);
+				if (callback && typeof callback === 'function') callback('hastebin.com/raw/' + JSON.parse(chunk.toString())['key']);
 			});
 		});
 
@@ -351,7 +351,7 @@ exports.parse = {
 		roomData.times.push(now);
 
 		// this deals with punishing rulebreakers, but note that the bot can't think, so it might make mistakes
-		if (config.allowmute && this.hasRank(this.ranks[room] || ' ', '%@&#&~') && config.whitelist.indexOf(user) === -1) {
+		if (config.allowmute && this.hasRank(this.ranks[room] || ' ', '%@#&~') && config.whitelist.indexOf(user) === -1) {
 			var useDefault = !(this.settings.modding && this.settings.modding[room]);
 			var pointVal = 0;
 			var muteMessage = '';
@@ -410,10 +410,10 @@ exports.parse = {
 				}
 				if (config.privaterooms.indexOf(room) > -1 && cmd === 'warn') cmd = 'mute'; // can't warn in private rooms
 				// if the bot has % and not @, it will default to hourmuting as its highest level of punishment instead of roombanning
-				if (roomData.points >= 4 && !this.hasRank(this.ranks[room] || ' ', '@&#&~')) cmd = 'hourmute';
+				if (roomData.points >= 4 && !this.hasRank(this.ranks[room] || ' ', '@#&~')) cmd = 'hourmute';
 				if (userData.zeroTol > 4) { // if zero tolerance users break a rule they get an instant roomban or hourmute
 					muteMessage = ', Automated response: zero tolerance user';
-					cmd = this.hasRank(this.ranks[room] || ' ', '@&#&~') ? 'roomban' : 'hourmute';
+					cmd = this.hasRank(this.ranks[room] || ' ', '@#&~') ? 'roomban' : 'hourmute';
 				}
 				if (roomData.points > 1) userData.zeroTol++; // getting muted or higher increases your zero tolerance level (warns do not)
 				roomData.lastAction = now;
