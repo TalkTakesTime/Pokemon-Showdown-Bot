@@ -58,12 +58,12 @@ exports.commands = {
 	credits: 'about',
 	about: function (arg, user, room) {
 		var text = (room === user || user.hasRank(room.id, '#')) ? '' : '/pm ' + user.id + ', ';
-		text += '**Pokémon Showdown Bot** by: Quinella, TalkTakesTime, and Morfent';
+		text += '**Pokémon Showdown Bot** by: Quinella, TalkTakesTime, and Morfent.';
 		this.say(room, text);
 	},
 	git: function (arg, user, room) {
 		var text = (room === user || user.isExcepted()) ? '' : '/pm ' + user.id + ', ';
-		text += '**Pokemon Showdown Bot** source code: ' + Config.fork;
+		text += '**Pokémon Showdown Bot** source code: ' + Config.fork;
 		this.say(room, text);
 	},
 	help: 'guide',
