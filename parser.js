@@ -365,7 +365,7 @@ exports.parse = {
 				let bannedPhraseSettings = this.settings.bannedphrases;
 				let bannedPhrases = !!bannedPhraseSettings ? (Object.keys(bannedPhraseSettings[roomid] || {})).concat(Object.keys(bannedPhraseSettings.global || {})) : [];
 				for (let bannedPhrase of bannedPhrases) {
-					if (msg.toLowerCase().indexOf(bannedPhrase) > -1) {
+					if (msg.toLowerCase().replace(/(\*\*|\_\_|\~\~|\`\`)/g, '').indexOf(bannedPhrase) > -1) {
 						pointVal = 2;
 						muteMessage = ', Automated response: your message contained a banned phrase';
 						break;
