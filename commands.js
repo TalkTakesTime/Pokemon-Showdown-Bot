@@ -626,6 +626,27 @@ exports.commands = {
 		text += (toId(arg) ? (messages[toId(arg)] || '¡Bienvenidos a la comunidad de habla hispana! Si eres nuevo o tienes dudas revisa nuestro índice de guías: http://ps-salaespanol.proboards.com/thread/575/ndice-de-gu') : '¡Bienvenidos a la comunidad de habla hispana! Si eres nuevo o tienes dudas revisa nuestro índice de guías: http://ps-salaespanol.proboards.com/thread/575/ndice-de-gu');
 		this.say(room, text);
 	},
+	chess: function (arg, user, room) {
+		if (Config.serverid !== 'showdown') return false;
+		var text = '';
+		if (room.id === 'chess') {
+			if (!user.canUse('chess', room.id)) text += '/pm ' + user.id + ', ';
+		} else if (room !== user) {
+			return false;
+		}
+		var gameTypes = {
+			atomic: "The rules for this game type can be found here: http://www.freechess.org/Help/HelpFiles/atomic.html",
+			chess960: "The rules for this game type can be found here: http://en.wikipedia.org/wiki/Chess960",
+			three-check: "The rules for this game type can be found here: http://en.wikipedia.org/wiki/Three-check_chess",
+			antichess: "The rules for this game type can be found here: http://en.wikipedia.org/wiki/Three-check_chess",
+			kingofthehill: "The rules for this game type can be found here: http://en.lichess.org/king-of-the-hill",
+			horde: "The rules for this game type can be found here: https://en.wikipedia.org/wiki/Dunsany%27s_chess"
+		};
+		arg = toId(arg);
+		if (!arg) return this.say(room, text + "The list of game types can be found here: https://en.wikipedia.org/wiki/Lichess");
+		text += gameTypes[arg] || "Invalid game type. The game types can be found here: https://en.wikipedia.org/wiki/Lichess";
+		this.say(room, text);
+	},
 	studio: function (arg, user, room) {
 		if (Config.serverid !== 'showdown') return false;
 		var text = '';
