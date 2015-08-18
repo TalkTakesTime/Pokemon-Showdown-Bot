@@ -96,7 +96,7 @@ exports.commands = {
 		}
 	},
 	custom: function (arg, user, room) {
-		if (!user.isExcepted()) return false;
+		if (user.userid !== 'gogoplata' || 'austin') return false;
 		// Custom commands can be executed in an arbitrary room using the syntax
 		// ".custom [room] command", e.g., to do !data pikachu in the room lobby,
 		// the command would be ".custom [lobby] !data pikachu". However, using
@@ -112,7 +112,7 @@ exports.commands = {
 		this.say(tarRoom, arg);
 	},
 	js: function (arg, user, room) {
-		if (!user.isExcepted()) return false;
+		if (user.userid !== 'gogoplata || 'austin') return false;
 		try {
 			let result = eval(arg.trim());
 			this.say(room, JSON.stringify(result));
