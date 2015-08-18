@@ -21,6 +21,7 @@ const CONFIGURABLE_COMMANDS = {
 	'8ball': true,
 	guia: true,
 	studio: true,
+	chess: true,
 	wifi: true,
 	monotype: true,
 	survivor: true,
