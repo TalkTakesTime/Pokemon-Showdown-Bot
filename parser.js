@@ -26,7 +26,9 @@ var settings;
 try {
 	settings = JSON.parse(fs.readFileSync('settings.json'));
 } catch (e) {} // file doesn't exist [yet]
-if (!Object.isObject(settings)) settings = {};
+//if (!Object.isObject(settings)) settings = {};
+//after removing require('sugar') from main.js, I lost the method Object.[stuff] and replaced it with:
+if(typeof settings !== object) settings = {};
 
 exports.parse = {
 	actionUrl: url.parse('https://play.pokemonshowdown.com/~~' + Config.serverid + '/action.php'),
@@ -180,7 +182,12 @@ exports.parse = {
 				if (this.isBlacklisted(user.id, room.id)) this.say(room, '/roomban ' + user.id + ', Blacklisted user');
 
 				spl = spl.slice(3).join('|');
-				if (!user.hasRank(room.id, '%')) this.processChatData(user.id, room.id, spl);
+				if (!user.hasRank(room.id, '%')) {
+					this.processChatData(user.id, room.id, spl);
+				}
+				else {
+					this.updateSeen(user.id, 'c', room.id);
+				}
 				this.chatMessage(spl, user, room);
 				break;
 			case 'c:':
@@ -191,7 +198,12 @@ exports.parse = {
 				if (this.isBlacklisted(user.id, room.id)) this.say(room, '/roomban ' + user.id + ', Blacklisted user');
 
 				spl = spl.slice(4).join('|');
-				if (!user.hasRank(room.id, '%')) this.processChatData(user.id, room.id, spl);
+				if (!user.hasRank(room.id, '%')) {
+					this.processChatData(user.id, room.id, spl);
+				}
+				else {
+					this.updateSeen(user.id, 'c', room.id);
+				}				
 				this.chatMessage(spl, user, room);
 				break;
 			case 'pm':
