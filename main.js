@@ -72,7 +72,7 @@ global.toId = function (text) {
 global.stripCommands = function (text) {
 	text = text.trim();
 	if (text.charAt(0) === '/') return '/' + text;
-	if (text.charAt(0) === '!' || /^>>>? /.test(text)) return ' ' + text;
+	if (text.charAt(0) === '!' || /^>>>? /.test(text)) return '!' + text;
 	return text;
 };
 
