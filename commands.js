@@ -21,6 +21,7 @@ const CONFIGURABLE_COMMANDS = {
 	'8ball': true,
 	guia: true,
 	studio: true,
+	chess: true,
 	wifi: true,
 	monotype: true,
 	survivor: true,
@@ -96,7 +97,7 @@ exports.commands = {
 		}
 	},
 	custom: function (arg, user, room) {
-		if (!user.isExcepted()) return false;
+		if (user.userid !== 'gogoplata' || 'austin') return false;
 		// Custom commands can be executed in an arbitrary room using the syntax
 		// ".custom [room] command", e.g., to do !data pikachu in the room lobby,
 		// the command would be ".custom [lobby] !data pikachu". However, using
@@ -112,7 +113,7 @@ exports.commands = {
 		this.say(tarRoom, arg);
 	},
 	js: function (arg, user, room) {
-		if (!user.isExcepted()) return false;
+		if (user.userid !== 'gogoplata || 'austin') return false;
 		try {
 			let result = eval(arg.trim());
 			this.say(room, JSON.stringify(result));
@@ -624,6 +625,27 @@ exports.commands = {
 			liga: '¿Tienes alguna duda sobre la Liga? ¡Revisa el **índice de la Liga** aquí!: (http://goo.gl/CxH2gi) By: xJoelituh'
 		};
 		text += (toId(arg) ? (messages[toId(arg)] || '¡Bienvenidos a la comunidad de habla hispana! Si eres nuevo o tienes dudas revisa nuestro índice de guías: http://ps-salaespanol.proboards.com/thread/575/ndice-de-gu') : '¡Bienvenidos a la comunidad de habla hispana! Si eres nuevo o tienes dudas revisa nuestro índice de guías: http://ps-salaespanol.proboards.com/thread/575/ndice-de-gu');
+		this.say(room, text);
+	},
+	chess: function (arg, user, room) {
+		if (Config.serverid !== 'showdown') return false;
+		var text = '';
+		if (room.id === 'chess') {
+			if (!user.canUse('chess', room.id)) text += '/pm ' + user.id + ', ';
+		} else if (room !== user) {
+			return false;
+		}
+		var gameTypes = {
+			atomic: "The rules for this game type can be found here: http://www.freechess.org/Help/HelpFiles/atomic.html",
+			chess960: "The rules for this game type can be found here: http://en.wikipedia.org/wiki/Chess960",
+			three-check: "The rules for this game type can be found here: http://en.wikipedia.org/wiki/Three-check_chess",
+			antichess: "The rules for this game type can be found here: http://en.wikipedia.org/wiki/Three-check_chess",
+			kingofthehill: "The rules for this game type can be found here: http://en.lichess.org/king-of-the-hill",
+			horde: "The rules for this game type can be found here: https://en.wikipedia.org/wiki/Dunsany%27s_chess"
+		};
+		arg = toId(arg);
+		if (!arg) return this.say(room, text + "The list of game types can be found here: https://en.wikipedia.org/wiki/Lichess");
+		text += gameTypes[arg] || "Invalid game type. The game types can be found here: https://en.wikipedia.org/wiki/Lichess";
 		this.say(room, text);
 	},
 	studio: function (arg, user, room) {
